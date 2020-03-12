@@ -34,7 +34,6 @@ import (
 	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/services/ec2"
 	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/services/elb"
 	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/services/secretsmanager"
-	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/services/userdata"
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1alpha2"
 	"sigs.k8s.io/cluster-api/controllers/noderefutil"
 	capierrors "sigs.k8s.io/cluster-api/errors"
@@ -462,11 +461,11 @@ func (r *AWSMachineReconciler) getOrCreate(scope *scope.MachineScope, ec2svc ser
 	}
 
 	if scope.UseSecretsManager() {
-		compressedUserData, err := userdata.GzipBytes(userData)
-		if err != nil {
-			return nil, err
-		}
-		prefix, chunks, serviceErr := secretSvc.Create(scope, compressedUserData)
+		//compressedUserData, err := userdata.GzipBytes(userData)
+		//if err != nil {
+		//	return nil, err
+		//}
+		prefix, chunks, serviceErr := secretSvc.Create(scope, userData)
 		// Only persist the AWS Secrets Manager entries if there is at least one
 		if chunks > 0 {
 			if err := scope.SetSecretPrefix(prefix); err != nil {

@@ -33,7 +33,6 @@ import (
 	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/converters"
 	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/filter"
 	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope"
-	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/services/userdata"
 	"sigs.k8s.io/cluster-api-provider-aws/pkg/record"
 	"sigs.k8s.io/cluster-api/util"
 )
@@ -166,12 +165,12 @@ func (s *Service) CreateInstance(scope *scope.MachineScope, userData []byte) (*i
 		)
 	}
 
-	compressedUserData, err := userdata.GzipBytes(userData)
-	if err != nil {
-		return nil, errors.New("failed to gzip userdata")
-	}
+	//compressedUserData, err := userdata.GzipBytes(userData)
+	//if err != nil {
+	//	return nil, errors.New("failed to gzip userdata")
+	//}
 
-	input.UserData = pointer.StringPtr(base64.StdEncoding.EncodeToString(compressedUserData))
+	input.UserData = pointer.StringPtr(base64.StdEncoding.EncodeToString(userData))
 
 	// Set security groups.
 	ids, err := s.GetCoreSecurityGroups(scope)
