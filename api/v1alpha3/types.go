@@ -73,9 +73,6 @@ const (
 type Network struct {
 	// SecurityGroups is a map from the role/kind of the security group to its unique name, if any.
 	SecurityGroups map[SecurityGroupRole]SecurityGroup `json:"securityGroups,omitempty"`
-
-	// APIServerELB is the Kubernetes api server classic load balancer.
-	APIServerELB ClassicELB `json:"apiServerElb,omitempty"`
 }
 
 // ClassicELBScheme defines the scheme of a classic load balancer.
@@ -303,9 +300,6 @@ type RouteTable struct {
 type SecurityGroupRole string
 
 var (
-	// SecurityGroupBastion defines an SSH bastion role
-	SecurityGroupBastion = SecurityGroupRole("bastion")
-
 	// SecurityGroupNode defines a Kubernetes workload node role
 	SecurityGroupNode = SecurityGroupRole("node")
 
@@ -541,6 +535,9 @@ type Instance struct {
 	// Configuration options for the root storage volume.
 	// +optional
 	RootVolume *RootVolume `json:"rootVolume,omitempty"`
+	// Configuration options for the data storage volume.
+	// +optional
+	DataVolumes []*DataVolume `json:"dataVolumes,omitempty"`
 
 	// Specifies ENIs attached to instance
 	NetworkInterfaces []string `json:"networkInterfaces,omitempty"`
@@ -573,4 +570,13 @@ type RootVolume struct {
 	// The key must already exist and be accessible by the controller.
 	// +optional
 	EncryptionKey string `json:"encryptionKey,omitempty"`
+}
+
+// DataVolume encapsulates the configuration options for the data volume
+type DataVolume struct {
+	RootVolume `json:",inline"`
+
+	//MountPath is the mount path of data volumes
+	// +optional
+	MountPath string `json:"mountPath,omitempty"`
 }

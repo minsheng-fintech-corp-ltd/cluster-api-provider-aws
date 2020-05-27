@@ -63,3 +63,21 @@ webhooks:
     - UPDATE
     resources:
     - awsmachinetemplates
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: webhook-service
+      namespace: system
+      path: /validate-infrastructure-cluster-x-k8s-io-v1alpha3-tenantconfig
+  failurePolicy: Fail
+  name: vtenantconfig.kb.io
+  rules:
+  - apiGroups:
+    - infrastructure.cluster.x-k8s.io
+    apiVersions:
+    - v1alpha3
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - tenantconfigs

@@ -77,7 +77,7 @@ endif
 # Set build time variables including version details
 LDFLAGS := $(shell source ./hack/version.sh; version::ldflags)
 
-GOLANG_VERSION := 1.13.8
+GOLANG_VERSION := 1.14.3
 
 # 'functional tests' as the ginkgo filter will run ALL tests ~ 2 hours @ 3 node concurrency.
 E2E_FOCUS := "functional tests"
@@ -186,11 +186,6 @@ generate-go: $(CONTROLLER_GEN) $(CONVERSION_GEN) $(MOCKGEN) ## Runs Go related g
 	$(CONTROLLER_GEN) \
 		paths=./api/... \
 		object:headerFile=./hack/boilerplate/boilerplate.generatego.txt
-
-	$(CONVERSION_GEN) \
-		--input-dirs=./api/v1alpha2 \
-		--output-file-base=zz_generated.conversion \
-		--go-header-file=./hack/boilerplate/boilerplate.generatego.txt
 	go generate ./...
 
 .PHONY: generate-manifests

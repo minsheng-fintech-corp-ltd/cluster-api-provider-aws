@@ -34,7 +34,23 @@ spec:
           httpGet:
             path: /healthz
             port: healthz
+        env:
+        - name: AWS_REGION
+          value: cn-northwest-1
+        - name: AWS_WEB_IDENTITY_TOKEN_FILE
+          value: "/var/run/secrets/eks.amazonaws.com/serviceaccount/token"
+        volumeMounts:
+        - mountPath: "/var/run/secrets/eks.amazonaws.com/serviceaccount/"
+          name: aws-token
       terminationGracePeriodSeconds: 10
       tolerations:
         - effect: NoSchedule
           key: node-role.kubernetes.io/master
+      volumes:
+      - name: aws-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: "k8s.mstech.com.cn"
+              expirationSeconds: 86400
+              path: token

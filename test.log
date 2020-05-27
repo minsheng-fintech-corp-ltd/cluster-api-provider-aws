@@ -1,0 +1,1577 @@
+I0602 23:55:58.322184   45107 listener.go:44] controller-runtime/metrics "msg"="metrics server is starting to listen"  "addr"=":8080"
+I0602 23:55:58.322912   45107 main.go:252] setup "msg"="starting manager"  "version"="v0.5.3-1.16-dirty"
+I0602 23:55:58.323352   45107 internal.go:356] controller-runtime/manager "msg"="starting metrics server"  "path"="/metrics"
+I0602 23:55:58.323860   45107 controller.go:164] controller-runtime/controller "msg"="Starting EventSource"  "controller"="awscluster" "source"={"Type":{"metadata":{"creationTimestamp":null},"spec":{"controlPlaneEndpoint":{"host":"","port":0},"tenantConfigName":""},"status":{"ready":false,"tenantList":null}}}
+I0602 23:55:58.324283   45107 controller.go:164] controller-runtime/controller "msg"="Starting EventSource"  "controller"="tenantconfig" "source"={"Type":{"metadata":{"creationTimestamp":null},"spec":{"networkSpec":{"vpc":{}},"awsClusterName":""},"status":{"network":{}}}}
+I0602 23:55:58.326780   45107 controller.go:164] controller-runtime/controller "msg"="Starting EventSource"  "controller"="awsmachine" "source"={"Type":{"metadata":{"creationTimestamp":null},"spec":{"ami":{},"cloudInit":{}},"status":{"ready":false}}}
+I0602 23:55:58.429169   45107 controller.go:171] controller-runtime/controller "msg"="Starting Controller"  "controller"="tenantconfig"
+I0602 23:55:58.429237   45107 controller.go:190] controller-runtime/controller "msg"="Starting workers"  "controller"="tenantconfig" "worker count"=1
+I0602 23:55:58.429194   45107 controller.go:164] controller-runtime/controller "msg"="Starting EventSource"  "controller"="awscluster" "source"={"Type":{"metadata":{"creationTimestamp":null},"spec":{"networkSpec":{"vpc":{}},"awsClusterName":""},"status":{"network":{}}}}
+I0602 23:55:58.429367   45107 tenantconfig_controller.go:54] controllers/TenantConfig "msg"="reconciling tenant" "tenantconfig"={"Namespace":"cluster-ops","Name":"mutl-account-master"} 
+I0602 23:55:58.429438   45107 controller.go:164] controller-runtime/controller "msg"="Starting EventSource"  "controller"="awsmachine" "source"={"Type":{"metadata":{"creationTimestamp":null},"spec":{"clusterName":"","bootstrap":{},"infrastructureRef":{}},"status":{"bootstrapReady":false,"infrastructureReady":false}}}
+I0602 23:55:58.429627   45107 controller.go:164] controller-runtime/controller "msg"="Starting EventSource"  "controller"="awscluster" "source"={"Type":{"metadata":{"creationTimestamp":null},"spec":{"controlPlaneEndpoint":{"host":"","port":0}},"status":{"infrastructureReady":false,"controlPlaneInitialized":false}}}
+I0602 23:55:58.532168   45107 controller.go:164] controller-runtime/controller "msg"="Starting EventSource"  "controller"="awsmachine" "source"={"Type":{"metadata":{"creationTimestamp":null},"spec":{"controlPlaneEndpoint":{"host":"","port":0},"tenantConfigName":""},"status":{"ready":false,"tenantList":null}}}
+I0602 23:55:58.532199   45107 controller.go:171] controller-runtime/controller "msg"="Starting Controller"  "controller"="awscluster"
+I0602 23:55:58.532450   45107 controller.go:164] controller-runtime/controller "msg"="Starting EventSource"  "controller"="awsmachine" "source"={"Type":{"metadata":{"creationTimestamp":null},"spec":{"controlPlaneEndpoint":{"host":"","port":0}},"status":{"infrastructureReady":false,"controlPlaneInitialized":false}}}
+I0602 23:55:58.532460   45107 controller.go:190] controller-runtime/controller "msg"="Starting workers"  "controller"="awscluster" "worker count"=5
+I0602 23:55:58.532732   45107 controller.go:171] controller-runtime/controller "msg"="Starting Controller"  "controller"="awsmachine"
+I0602 23:55:58.532832   45107 controller.go:190] controller-runtime/controller "msg"="Starting workers"  "controller"="awsmachine" "worker count"=10
+I0602 23:55:58.533635   45107 awscluster_controller.go:126] controllers/AWSCluster "msg"="wait until tenant config is ready" "awsCluster"="mutl-account-dev" "cluster"="mutl-account-dev" "namespace"="cluster-ops" 
+I0602 23:55:58.535200   45107 tenantconfig_controller.go:142] controllers/TenantConfig "msg"="Reconciling AWSCluster" "awsCluster"="mutl-account-dev" "cluster"="mutl-account-dev" "tenantconfig"={"Namespace":"cluster-ops","Name":"mutl-account-master"} 
+runtime: goroutine stack exceeds 1000000000-byte limit
+runtime: sp=0xc02f980368 stack=[0xc02f980000, 0xc04f980000]
+fatal error: stack overflow
+
+runtime stack:
+runtime.throw(0x28c3b35, 0xe)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/panic.go:1116 +0x72
+runtime.newstack()
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/stack.go:1034 +0x6ce
+runtime.morestack()
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/asm_amd64.s:449 +0x8f
+
+goroutine 191 [running]:
+runtime.heapBitsSetType(0xc05e803590, 0x30, 0x30, 0x27e9a20)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/mbitmap.go:947 +0xa4d fp=0xc02f980378 sp=0xc02f980370 pc=0x101885d
+runtime.mallocgc(0x30, 0x27e9a20, 0xc02f980401, 0x100e686)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/malloc.go:1066 +0x53e fp=0xc02f980418 sp=0xc02f980378 pc=0x100e8ae
+runtime.newobject(0x27e9a20, 0x2726300)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/malloc.go:1165 +0x38 fp=0xc02f980448 sp=0xc02f980418 pc=0x100eef8
+runtime.makemap(0x27a4b20, 0x1, 0x0, 0x203017)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/map.go:311 +0x190 fp=0xc02f980490 sp=0xc02f980448 pc=0x100fd70
+sigs.k8s.io/cluster-api-provider-aws/api/v1alpha3.Tags.DeepCopyInto(0xc000174900, 0xc02f980548)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/api/v1alpha3/zz_generated.deepcopy.go:957 +0x61 fp=0xc02f980538 sp=0xc02f980490 pc=0x1f3cbb1
+sigs.k8s.io/cluster-api-provider-aws/api/v1alpha3.Tags.DeepCopy(...)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/api/v1alpha3/zz_generated.deepcopy.go:970
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*ClusterScope).AdditionalTags(0xc000585200, 0x10)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/cluster.go:121 +0x71 fp=0xc02f980560 sp=0xc02f980538 pc=0x23a07f1
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803560)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:124 +0x44 fp=0xc02f980610 sp=0xc02f980560 pc=0x23a3ee4
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803530)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9806c0 sp=0xc02f980610 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803500)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980770 sp=0xc02f9806c0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8034d0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980820 sp=0xc02f980770 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8034a0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9808d0 sp=0xc02f980820 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803470)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980980 sp=0xc02f9808d0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803440)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980a30 sp=0xc02f980980 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803410)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980ae0 sp=0xc02f980a30 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8033e0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980b90 sp=0xc02f980ae0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8033b0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980c40 sp=0xc02f980b90 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803380)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980cf0 sp=0xc02f980c40 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803350)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980da0 sp=0xc02f980cf0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803320)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980e50 sp=0xc02f980da0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8032f0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980f00 sp=0xc02f980e50 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8032c0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f980fb0 sp=0xc02f980f00 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803290)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981060 sp=0xc02f980fb0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803260)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981110 sp=0xc02f981060 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803230)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9811c0 sp=0xc02f981110 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803200)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981270 sp=0xc02f9811c0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8031d0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981320 sp=0xc02f981270 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8031a0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9813d0 sp=0xc02f981320 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803170)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981480 sp=0xc02f9813d0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803140)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981530 sp=0xc02f981480 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803110)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9815e0 sp=0xc02f981530 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8030e0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981690 sp=0xc02f9815e0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8030b0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981740 sp=0xc02f981690 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803080)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9817f0 sp=0xc02f981740 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803050)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9818a0 sp=0xc02f9817f0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e803020)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981950 sp=0xc02f9818a0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802ff0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981a00 sp=0xc02f981950 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802fc0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981ab0 sp=0xc02f981a00 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802f90)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981b60 sp=0xc02f981ab0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802f60)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981c10 sp=0xc02f981b60 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802f30)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981cc0 sp=0xc02f981c10 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802f00)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981d70 sp=0xc02f981cc0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802ed0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981e20 sp=0xc02f981d70 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802ea0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981ed0 sp=0xc02f981e20 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802e70)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f981f80 sp=0xc02f981ed0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802e40)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982030 sp=0xc02f981f80 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802e10)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9820e0 sp=0xc02f982030 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802de0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982190 sp=0xc02f9820e0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802db0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982240 sp=0xc02f982190 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802d80)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9822f0 sp=0xc02f982240 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802d50)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9823a0 sp=0xc02f9822f0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802d20)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982450 sp=0xc02f9823a0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802cf0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982500 sp=0xc02f982450 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802cc0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9825b0 sp=0xc02f982500 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802c90)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982660 sp=0xc02f9825b0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802c60)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982710 sp=0xc02f982660 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802c30)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9827c0 sp=0xc02f982710 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802c00)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982870 sp=0xc02f9827c0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802bd0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982920 sp=0xc02f982870 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802ba0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9829d0 sp=0xc02f982920 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802b70)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982a80 sp=0xc02f9829d0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802b40)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982b30 sp=0xc02f982a80 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802b10)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982be0 sp=0xc02f982b30 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802ae0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982c90 sp=0xc02f982be0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802ab0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982d40 sp=0xc02f982c90 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802a80)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982df0 sp=0xc02f982d40 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802a50)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982ea0 sp=0xc02f982df0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802a20)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f982f50 sp=0xc02f982ea0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8029f0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983000 sp=0xc02f982f50 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8029c0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9830b0 sp=0xc02f983000 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802990)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983160 sp=0xc02f9830b0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802960)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983210 sp=0xc02f983160 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802930)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9832c0 sp=0xc02f983210 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802900)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983370 sp=0xc02f9832c0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8028d0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983420 sp=0xc02f983370 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8028a0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9834d0 sp=0xc02f983420 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802870)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983580 sp=0xc02f9834d0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802840)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983630 sp=0xc02f983580 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802810)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9836e0 sp=0xc02f983630 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8027e0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983790 sp=0xc02f9836e0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8027b0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983840 sp=0xc02f983790 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802780)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9838f0 sp=0xc02f983840 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802750)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9839a0 sp=0xc02f9838f0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802720)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983a50 sp=0xc02f9839a0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8026f0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983b00 sp=0xc02f983a50 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8026c0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983bb0 sp=0xc02f983b00 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802690)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983c60 sp=0xc02f983bb0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802660)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983d10 sp=0xc02f983c60 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802630)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983dc0 sp=0xc02f983d10 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802600)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983e70 sp=0xc02f983dc0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8025d0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983f20 sp=0xc02f983e70 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8025a0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f983fd0 sp=0xc02f983f20 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802570)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f984080 sp=0xc02f983fd0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802540)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f984130 sp=0xc02f984080 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802510)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9841e0 sp=0xc02f984130 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8024e0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f984290 sp=0xc02f9841e0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8024b0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f984340 sp=0xc02f984290 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802480)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9843f0 sp=0xc02f984340 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802450)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f9844a0 sp=0xc02f9843f0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e802420)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f984550 sp=0xc02f9844a0 pc=0x23a3eff
+sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope.(*TenantConfigScope).AdditionalTags(0xc00019b110, 0xc05e8023f0)
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope/tenant.go:125 +0x5f fp=0xc02f984600 sp=0xc02f984550 pc=0x23a3eff
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 1 [select]:
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).Start(0xc000207080, 0xc000636960, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:429 +0x1c2
+main.main()
+	/Users/shangxiangfan/go/src/sigs.k8s.io/cluster-api-provider-aws/main.go:253 +0x1129
+
+goroutine 293 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).watchHandler(0xc000160370, 0x2c6ffc0, 0xc0005f3f40, 0xc000349b90, 0xc00057da40, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:354 +0x1e2
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch(0xc000160370, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:320 +0x8b3
+k8s.io/client-go/tools/cache.(*Reflector).Run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:152 +0x33
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000064710)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000349f10, 0x3b9aca00, 0x0, 0xc00011c601, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*Reflector).Run(0xc000160370, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:151 +0x16b
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc000190950, 0xc0007e27a0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 7 [chan receive]:
+k8s.io/klog.(*loggingT).flushDaemon(0x3b4d240)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/klog@v1.0.0/klog.go:1010 +0x8b
+created by k8s.io/klog.init.0
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/klog@v1.0.0/klog.go:411 +0xd6
+
+goroutine 201 [select]:
+k8s.io/client-go/util/workqueue.(*delayingType).waitingLoop(0xc000181500)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/delaying_queue.go:222 +0x3f8
+created by k8s.io/client-go/util/workqueue.NewDelayingQueueWithCustomClock
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/delaying_queue.go:58 +0x1ae
+
+goroutine 28 [chan receive]:
+k8s.io/apimachinery/pkg/watch.(*Broadcaster).loop(0xc00018c900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/mux.go:207 +0x66
+created by k8s.io/apimachinery/pkg/watch.NewBroadcaster
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/mux.go:75 +0xcc
+
+goroutine 226 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start(0xc00060c6c0, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:203 +0xd0
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).startLeaderElectionRunnables.func1(0x2c603a0, 0xc00060c6c0, 0xc000207080)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:473 +0x49
+created by sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).startLeaderElectionRunnables
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:472 +0xd7
+
+goroutine 57 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/manager/signals.SetupSignalHandler.func1(0xc0001f3740, 0xc000636960)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/signals/signal.go:36 +0x34
+created by sigs.k8s.io/controller-runtime/pkg/manager/signals.SetupSignalHandler
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/signals/signal.go:35 +0xd0
+
+goroutine 231 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc0006669c8, 0x1)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc0006669b8)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/tools/cache.(*DeltaFIFO).Pop(0xc0006669a0, 0xc0001c34c0, 0x0, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/delta_fifo.go:409 +0xa0
+k8s.io/client-go/tools/cache.(*controller).processLoop(0xc0005bcc00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:153 +0x40
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000070e68)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000070e68, 0x3b9aca00, 0x0, 0xc000207501, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*controller).Run(0xc0005bcc00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:125 +0x2c1
+k8s.io/client-go/tools/cache.(*sharedIndexInformer).Run(0xc000668ab0, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:331 +0x3f9
+created by sigs.k8s.io/controller-runtime/pkg/cache/internal.(*specificInformersMap).addInformerToMap
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/informers_map.go:224 +0x3fa
+
+goroutine 67 [IO wait]:
+internal/poll.runtime_pollWait(0x471ba30, 0x72, 0xffffffffffffffff)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/netpoll.go:203 +0x55
+internal/poll.(*pollDesc).wait(0xc000352098, 0x72, 0x6600, 0x66d8, 0xffffffffffffffff)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:87 +0x45
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:92
+internal/poll.(*FD).Read(0xc000352080, 0xc000680000, 0x66d8, 0x66d8, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_unix.go:169 +0x201
+net.(*netFD).Read(0xc000352080, 0xc000680000, 0x66d8, 0x66d8, 0x203000, 0xc000347970, 0x100e686)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/fd_unix.go:202 +0x4f
+net.(*conn).Read(0xc000188648, 0xc000680000, 0x66d8, 0x66d8, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/net.go:184 +0x8e
+crypto/tls.(*atLeastReader).Read(0xc000531220, 0xc000680000, 0x66d8, 0x66d8, 0x442a600, 0x20300000000000, 0xc0003479c8)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:760 +0x60
+bytes.(*Buffer).ReadFrom(0xc0000a5e58, 0x2c5e620, 0xc000531220, 0x100c4a5, 0x2645aa0, 0x2840240)
+	/usr/local/Cellar/go/1.14.3/libexec/src/bytes/buffer.go:204 +0xb1
+crypto/tls.(*Conn).readFromUntil(0xc0000a5c00, 0x471bb10, 0xc000188648, 0x5, 0xc000188648, 0x442a600)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:782 +0xec
+crypto/tls.(*Conn).readRecordOrCCS(0xc0000a5c00, 0x0, 0x0, 0x28c5976)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:589 +0x115
+crypto/tls.(*Conn).readRecord(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:557
+crypto/tls.(*Conn).Read(0xc0000a5c00, 0xc00055c000, 0x1000, 0x1000, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:1233 +0x15b
+bufio.(*Reader).Read(0xc00050f860, 0xc0002902d8, 0x9, 0x9, 0xc000400780, 0xc000347d48, 0x1007543)
+	/usr/local/Cellar/go/1.14.3/libexec/src/bufio/bufio.go:226 +0x24f
+io.ReadAtLeast(0x2c5e480, 0xc00050f860, 0xc0002902d8, 0x9, 0x9, 0x9, 0xc0001f2b38, 0x1062dc0, 0xc0001f2ae0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/io/io.go:310 +0x87
+io.ReadFull(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/io/io.go:329
+golang.org/x/net/http2.readFrameHeader(0xc0002902d8, 0x9, 0x9, 0x2c5e480, 0xc00050f860, 0x0, 0xc000000000, 0xc000533680, 0xc0006e87e0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/frame.go:237 +0x87
+golang.org/x/net/http2.(*Framer).ReadFrame(0xc0002902a0, 0xc000533680, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/frame.go:492 +0xa1
+golang.org/x/net/http2.(*clientConnReadLoop).run(0xc000347fa8, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/transport.go:1741 +0x8d
+golang.org/x/net/http2.(*ClientConn).readLoop(0xc000102900)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/transport.go:1669 +0x6f
+created by golang.org/x/net/http2.(*Transport).newClientConn
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/transport.go:674 +0x64a
+
+goroutine 297 [select]:
+k8s.io/client-go/tools/cache.(*processorListener).pop(0xc000410780)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:621 +0x15a
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00044e370, 0xc0002ae280)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 289 [chan receive]:
+k8s.io/client-go/tools/cache.(*processorListener).run.func1.1(0x3, 0x3, 0x2000000000001)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:653 +0x54
+k8s.io/apimachinery/pkg/util/wait.ExponentialBackoff(0x989680, 0x3ff0000000000000, 0x3fb999999999999a, 0x5, 0x0, 0xc000428618, 0x1488538, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:292 +0x51
+k8s.io/client-go/tools/cache.(*processorListener).run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:652 +0x79
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000428760)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000428760, 0xdf8475800, 0x0, 0xc0001de301, 0xc000545080)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*processorListener).run(0xc000543a80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:650 +0x9b
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00044f870, 0xc00052eb10)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 255 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000145910, 0x3)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000145900)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc000181380, 0x0, 0x0, 0x200c0001d8600)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c6c0, 0xc000429700)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c6c0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000115520)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000115520, 0x3b9aca00, 0x0, 0xc000046a01, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000115520, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 217 [chan receive]:
+k8s.io/client-go/tools/record.(*eventBroadcasterImpl).StartEventWatcher.func1(0x2c70000, 0xc0006e4e40, 0xc000315530)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/record/event.go:291 +0xaa
+created by k8s.io/client-go/tools/record.(*eventBroadcasterImpl).StartEventWatcher
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/record/event.go:289 +0x6e
+
+goroutine 223 [chan receive]:
+k8s.io/client-go/tools/cache.(*controller).Run.func1(0xc000636900, 0xc0003f6080)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:104 +0x34
+created by k8s.io/client-go/tools/cache.(*controller).Run
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:103 +0xac
+
+goroutine 209 [select]:
+k8s.io/client-go/tools/cache.(*processorListener).pop(0xc0007e1480)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:621 +0x15a
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00013ad10, 0xc000187430)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 63 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/cache/internal.(*specificInformersMap).Start(0xc000290000, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/informers_map.go:143 +0x4c
+created by sigs.k8s.io/controller-runtime/pkg/cache/internal.(*InformersMap).Start
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/deleg_map.go:61 +0x50
+
+goroutine 267 [select]:
+k8s.io/client-go/tools/cache.(*processorListener).pop(0xc00073bb80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:621 +0x15a
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00013ad10, 0xc0003f9c00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 296 [chan receive]:
+k8s.io/client-go/tools/cache.(*processorListener).run.func1.1(0x0, 0xc0002de000, 0x41757d0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:653 +0x54
+k8s.io/apimachinery/pkg/util/wait.ExponentialBackoff(0x989680, 0x3ff0000000000000, 0x3fb999999999999a, 0x5, 0x0, 0xc000555e18, 0x268efe0, 0xc000436e01)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:292 +0x51
+k8s.io/client-go/tools/cache.(*processorListener).run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:652 +0x79
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000436f60)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000555f60, 0xdf8475800, 0x0, 0x1, 0xc000545020)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*processorListener).run(0xc000410780)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:650 +0x9b
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00044e370, 0xc0002ae270)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 271 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0xc000434500)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc0003f9f30)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0003f9f30, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc0003f9f30, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 229 [chan receive]:
+k8s.io/client-go/util/workqueue.(*Type).updateUnfinishedWorkLoop(0xc00057de00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:198 +0xac
+created by k8s.io/client-go/util/workqueue.newQueue
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:58 +0x132
+
+goroutine 254 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000145910, 0xc000000001)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000145900)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc000181380, 0x0, 0x0, 0x200c000041500)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c6c0, 0xc000060f00)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c6c0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000115510)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000115510, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000115510, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 58 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).serveMetrics(0xc000207080, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:363 +0x1d5
+created by sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).Start
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:410 +0x316
+
+goroutine 185 [select]:
+k8s.io/client-go/util/workqueue.(*delayingType).waitingLoop(0xc000447500)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/delaying_queue.go:222 +0x3f8
+created by k8s.io/client-go/util/workqueue.NewDelayingQueueWithCustomClock
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/delaying_queue.go:58 +0x1ae
+
+goroutine 184 [chan receive]:
+k8s.io/client-go/util/workqueue.(*Type).updateUnfinishedWorkLoop(0xc000447380)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:198 +0xac
+created by k8s.io/client-go/util/workqueue.newQueue
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:58 +0x132
+
+goroutine 188 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc0001f1380, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc0001f1370)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+golang.org/x/net/http2.(*pipe).Read(0xc0001f1368, 0xc0005fc400, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/pipe.go:65 +0x8f
+golang.org/x/net/http2.transportResponseBody.Read(0xc0001f1340, 0xc0005fc400, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/transport.go:2027 +0xaf
+encoding/json.(*Decoder).refill(0xc000606420, 0xc00062fd20, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:165 +0xeb
+encoding/json.(*Decoder).readValue(0xc000606420, 0x0, 0x0, 0x25f2f80)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:140 +0x1e8
+encoding/json.(*Decoder).Decode(0xc000606420, 0x262f5c0, 0xc00062fd20, 0x104802c, 0xc000545c18)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:63 +0x79
+k8s.io/apimachinery/pkg/util/framer.(*jsonFrameReader).Read(0xc000174630, 0xc000178000, 0x400, 0x400, 0x3, 0x0, 0x38)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/framer/framer.go:150 +0x1a1
+k8s.io/apimachinery/pkg/runtime/serializer/streaming.(*decoder).Decode(0xc00011c320, 0x0, 0x2c6fc00, 0xc00018d740, 0x0, 0x0, 0xc00050f3f0, 0x0, 0xc000431f78)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/runtime/serializer/streaming/streaming.go:77 +0x89
+k8s.io/client-go/rest/watch.(*Decoder).Decode(0xc00062fd00, 0xc000046070, 0xc000545bc0, 0xc000545bc0, 0x0, 0x1, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/rest/watch/decoder.go:49 +0x6e
+k8s.io/apimachinery/pkg/watch.(*StreamWatcher).receive(0xc00018d700)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:104 +0x147
+created by k8s.io/apimachinery/pkg/watch.NewStreamWatcher
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:71 +0xbe
+
+goroutine 59 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).serveHealthProbes(0xc000207080, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:393 +0x157
+created by sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).Start
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:415 +0x2e0
+
+goroutine 279 [chan receive]:
+k8s.io/client-go/tools/cache.(*sharedProcessor).run(0xc00044f810, 0xc0000526c0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:529 +0x53
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc0003f0bf0, 0xc00017a4e0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 275 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc0005362e8, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc0005362d8)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/tools/cache.(*DeltaFIFO).Pop(0xc0005362c0, 0xc00045bc70, 0x0, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/delta_fifo.go:409 +0xa0
+k8s.io/client-go/tools/cache.(*controller).processLoop(0xc000176700)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:153 +0x40
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000554e68)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000554e68, 0x3b9aca00, 0x0, 0xc000159801, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*controller).Run(0xc000176700, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:125 +0x2c1
+k8s.io/client-go/tools/cache.(*sharedIndexInformer).Run(0xc0006e8630, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:331 +0x3f9
+created by sigs.k8s.io/controller-runtime/pkg/cache/internal.(*specificInformersMap).addInformerToMap
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/informers_map.go:224 +0x3fa
+
+goroutine 280 [chan receive]:
+k8s.io/client-go/tools/cache.(*controller).Run.func1(0xc000636900, 0xc000176700)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:104 +0x34
+created by k8s.io/client-go/tools/cache.(*controller).Run
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:103 +0xac
+
+goroutine 262 [select]:
+k8s.io/client-go/tools/cache.(*processorListener).pop(0xc00073ba80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:621 +0x15a
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00013aed0, 0xc0003f9830)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 239 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000666b28, 0x1)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000666b18)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/tools/cache.(*DeltaFIFO).Pop(0xc000666b00, 0xc0001c37b0, 0x0, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/delta_fifo.go:409 +0xa0
+k8s.io/client-go/tools/cache.(*controller).processLoop(0xc0005bd080)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:153 +0x40
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000072e68)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000072e68, 0x3b9aca00, 0x0, 0xc00034f301, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*controller).Run(0xc0005bd080, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:125 +0x2c1
+k8s.io/client-go/tools/cache.(*sharedIndexInformer).Run(0xc000668bd0, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:331 +0x3f9
+created by sigs.k8s.io/controller-runtime/pkg/cache/internal.(*specificInformersMap).addInformerToMap
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/informers_map.go:224 +0x3fa
+
+goroutine 269 [select]:
+k8s.io/client-go/tools/cache.(*processorListener).pop(0xc00073bc00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:621 +0x15a
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00044e370, 0xc0003f9dd0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 230 [select]:
+k8s.io/client-go/util/workqueue.(*delayingType).waitingLoop(0xc00057df80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/delaying_queue.go:222 +0x3f8
+created by k8s.io/client-go/util/workqueue.NewDelayingQueueWithCustomClock
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/delaying_queue.go:58 +0x1ae
+
+goroutine 256 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000145910, 0xc000000004)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000145900)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc000181380, 0x0, 0x0, 0x26b0100)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c6c0, 0xc0004d4700)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c6c0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000115530)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000115530, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000115530, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 253 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000145910, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000145900)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc000181380, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c6c0, 0xc0003f3100)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c6c0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000115500)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000115500, 0x3b9aca00, 0x0, 0x2979f01, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000115500, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 200 [chan receive]:
+k8s.io/client-go/util/workqueue.(*Type).updateUnfinishedWorkLoop(0xc000181380)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:198 +0xac
+created by k8s.io/client-go/util/workqueue.newQueue
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:58 +0x132
+
+goroutine 216 [chan receive]:
+k8s.io/client-go/tools/record.(*eventBroadcasterImpl).StartEventWatcher.func1(0x2c70000, 0xc0006e4e10, 0xc0006e4de0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/record/event.go:291 +0xaa
+created by k8s.io/client-go/tools/record.(*eventBroadcasterImpl).StartEventWatcher
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/record/event.go:289 +0x6e
+
+goroutine 288 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc0005209e0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc0005209d0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+golang.org/x/net/http2.(*pipe).Read(0xc0005209c8, 0xc0005fcc00, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/pipe.go:65 +0x8f
+golang.org/x/net/http2.transportResponseBody.Read(0xc0005209a0, 0xc0005fcc00, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/transport.go:2027 +0xaf
+encoding/json.(*Decoder).refill(0xc0000cd8c0, 0xc000531260, 0x15)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:165 +0xeb
+encoding/json.(*Decoder).readValue(0xc0000cd8c0, 0x0, 0x0, 0x25f2f80)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:140 +0x1e8
+encoding/json.(*Decoder).Decode(0xc0000cd8c0, 0x262f5c0, 0xc000531260, 0x203000, 0x100b3ab)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:63 +0x79
+k8s.io/apimachinery/pkg/util/framer.(*jsonFrameReader).Read(0xc000533770, 0xc000178800, 0x400, 0x400, 0x100c4a5, 0x2702820, 0x38)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/framer/framer.go:150 +0x1a1
+k8s.io/apimachinery/pkg/runtime/serializer/streaming.(*decoder).Decode(0xc00011ccd0, 0x0, 0x2c6fc00, 0xc00054c080, 0x0, 0x2979630, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/runtime/serializer/streaming/streaming.go:77 +0x89
+k8s.io/client-go/rest/watch.(*Decoder).Decode(0xc000531240, 0x2c72700, 0xc0000526c0, 0xc00017a460, 0xc0005362c0, 0x3b78928, 0xc0003f0bf0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/rest/watch/decoder.go:49 +0x6e
+k8s.io/apimachinery/pkg/watch.(*StreamWatcher).receive(0xc00054c040)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:104 +0x147
+created by k8s.io/apimachinery/pkg/watch.NewStreamWatcher
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:71 +0xbe
+
+goroutine 295 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch.func2(0xc000536370, 0xc000636900, 0xc000544e40, 0xc0001f2a80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:260 +0x14a
+created by k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:254 +0x249
+
+goroutine 236 [chan receive]:
+k8s.io/client-go/tools/cache.(*controller).Run.func1(0xc000636900, 0xc0005bcc00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:104 +0x34
+created by k8s.io/client-go/tools/cache.(*controller).Run
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:103 +0xac
+
+goroutine 235 [chan receive]:
+k8s.io/client-go/tools/cache.(*sharedProcessor).run(0xc00013acb0, 0xc00067a1e0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:529 +0x53
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc000800410, 0xc00062e640)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 261 [chan receive]:
+k8s.io/client-go/tools/cache.(*processorListener).run.func1.1(0x3, 0xc00005fef2, 0x3)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:653 +0x54
+k8s.io/apimachinery/pkg/util/wait.ExponentialBackoff(0x989680, 0x3ff0000000000000, 0x3fb999999999999a, 0x5, 0x0, 0xc0001e9e18, 0xa, 0xa)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:292 +0x51
+k8s.io/client-go/tools/cache.(*processorListener).run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:652 +0x79
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc00005ff60)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0001e9f60, 0xdf8475800, 0x0, 0x1, 0xc0006361e0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*processorListener).run(0xc00073ba80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:650 +0x9b
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00013aed0, 0xc0003f9820)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 208 [chan receive]:
+k8s.io/client-go/tools/cache.(*processorListener).run.func1.1(0x400, 0x3, 0x1)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:653 +0x54
+k8s.io/apimachinery/pkg/util/wait.ExponentialBackoff(0x989680, 0x3ff0000000000000, 0x3fb999999999999a, 0x5, 0x0, 0xc000618e18, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:292 +0x51
+k8s.io/client-go/tools/cache.(*processorListener).run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:652 +0x79
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000437f60)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000618f60, 0xdf8475800, 0x0, 0xc000544901, 0xc000544d20)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*processorListener).run(0xc0007e1480)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:650 +0x9b
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00013ad10, 0xc000187420)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 286 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc0000cd380, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc0000cd370)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+golang.org/x/net/http2.(*pipe).Read(0xc0000cd368, 0xc0005fca00, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/pipe.go:65 +0x8f
+golang.org/x/net/http2.transportResponseBody.Read(0xc0000cd340, 0xc0005fca00, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/transport.go:2027 +0xaf
+encoding/json.(*Decoder).refill(0xc0000cd600, 0xc0005311e0, 0x15)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:165 +0xeb
+encoding/json.(*Decoder).readValue(0xc0000cd600, 0x0, 0x0, 0x25f2f80)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:140 +0x1e8
+encoding/json.(*Decoder).Decode(0xc0000cd600, 0x262f5c0, 0xc0005311e0, 0x203000, 0x100b3ab)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:63 +0x79
+k8s.io/apimachinery/pkg/util/framer.(*jsonFrameReader).Read(0xc0005335f0, 0xc000178400, 0x400, 0x400, 0x100c4a5, 0x2702820, 0x38)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/framer/framer.go:150 +0x1a1
+k8s.io/apimachinery/pkg/runtime/serializer/streaming.(*decoder).Decode(0xc00011cc30, 0x0, 0x2c6fc00, 0xc0005f3f80, 0x0, 0x2979630, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/runtime/serializer/streaming/streaming.go:77 +0x89
+k8s.io/client-go/rest/watch.(*Decoder).Decode(0xc0005311c0, 0x2c72700, 0xc0000526c0, 0xc00017a460, 0xc0005362c0, 0x3b78928, 0xc0003f0bf0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/rest/watch/decoder.go:49 +0x6e
+k8s.io/apimachinery/pkg/watch.(*StreamWatcher).receive(0xc0005f3f40)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:104 +0x147
+created by k8s.io/apimachinery/pkg/watch.NewStreamWatcher
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:71 +0xbe
+
+goroutine 270 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x9)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0xc000435f00)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc0003f9f20)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0003f9f20, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc0003f9f20, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 292 [chan receive]:
+k8s.io/client-go/tools/cache.(*controller).Run.func1(0xc000636900, 0xc0007e1580)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:104 +0x34
+created by k8s.io/client-go/tools/cache.(*controller).Run
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:103 +0xac
+
+goroutine 281 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).watchHandler(0xc000536370, 0x2c6ffc0, 0xc00054c040, 0xc000845b90, 0xc0001f2a80, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:354 +0x1e2
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch(0xc000536370, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:320 +0x8b3
+k8s.io/client-go/tools/cache.(*Reflector).Run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:152 +0x33
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc0004d4f10)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000845f10, 0x3b9aca00, 0x0, 0xc00011cf01, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*Reflector).Run(0xc000536370, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:151 +0x16b
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc0003f0c10, 0xc00017a520)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 237 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).watchHandler(0xc000666a50, 0x2c6ffc0, 0xc00018d700, 0xc000345b90, 0xc00050e780, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:354 +0x1e2
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch(0xc000666a50, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:320 +0x8b3
+k8s.io/client-go/tools/cache.(*Reflector).Run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:152 +0x33
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000060710)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000345f10, 0x3b9aca00, 0x0, 0xc00062e501, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*Reflector).Run(0xc000666a50, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:151 +0x16b
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc000800430, 0xc00062e680)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 251 [select]:
+k8s.io/client-go/tools/cache.(*processorListener).pop(0xc0005bdc00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:621 +0x15a
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc0002ba3e0, 0xc0001151b0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 247 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000666028, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000666018)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/tools/cache.(*DeltaFIFO).Pop(0xc000666000, 0xc000314020, 0x0, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/delta_fifo.go:409 +0xa0
+k8s.io/client-go/tools/cache.(*controller).processLoop(0xc0003f6080)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:153 +0x40
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000557e68)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000557e68, 0x3b9aca00, 0x0, 0xc000322001, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*controller).Run(0xc0003f6080, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:125 +0x2c1
+k8s.io/client-go/tools/cache.(*sharedIndexInformer).Run(0xc0000edcb0, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:331 +0x3f9
+created by sigs.k8s.io/controller-runtime/pkg/cache/internal.(*specificInformersMap).addInformerToMap
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/informers_map.go:224 +0x3fa
+
+goroutine 222 [chan receive]:
+k8s.io/client-go/tools/cache.(*sharedProcessor).run(0xc0002ba380, 0xc00067a780)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:529 +0x53
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc0000460d0, 0xc000312040)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 291 [chan receive]:
+k8s.io/client-go/tools/cache.(*sharedProcessor).run(0xc00044e310, 0xc000544d80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:529 +0x53
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc000190930, 0xc0007e2760)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 220 [IO wait]:
+internal/poll.runtime_pollWait(0x471b950, 0x72, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/netpoll.go:203 +0x55
+internal/poll.(*pollDesc).wait(0xc0006f7298, 0x72, 0x0, 0x0, 0x28b8dbe)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:87 +0x45
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:92
+internal/poll.(*FD).Accept(0xc0006f7280, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_unix.go:384 +0x1d4
+net.(*netFD).accept(0xc0006f7280, 0xc000617dd8, 0xc000100400, 0x4175e98)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/fd_unix.go:238 +0x42
+net.(*TCPListener).accept(0xc0005be0a0, 0xc000617e18, 0x100eef8, 0x30)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/tcpsock_posix.go:139 +0x32
+net.(*TCPListener).Accept(0xc0005be0a0, 0x27884a0, 0xc0006e5380, 0x25ee440, 0x3b2ada0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/tcpsock.go:261 +0x64
+net/http.(*Server).Serve(0xc000290540, 0x2c99ec0, 0xc0005be0a0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/server.go:2901 +0x25d
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).serveMetrics.func1(0x28bb4c2, 0x8, 0xc000290540, 0xc000207080)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:357 +0xf6
+created by sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).serveMetrics
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:355 +0x1bb
+
+goroutine 62 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/cache/internal.(*InformersMap).Start(0xc0001be760, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/deleg_map.go:63 +0x97
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).waitForCache.func1(0xc000207080)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:495 +0x39
+created by sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).waitForCache
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:494 +0x5a
+
+goroutine 207 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc0003faf60, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc0003faf50)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+golang.org/x/net/http2.(*pipe).Read(0xc0003faf48, 0xc0007e6400, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/pipe.go:65 +0x8f
+golang.org/x/net/http2.transportResponseBody.Read(0xc0003faf20, 0xc0007e6400, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/transport.go:2027 +0xaf
+encoding/json.(*Decoder).refill(0xc0003fb760, 0xc0007e25c0, 0x417e6e0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:165 +0xeb
+encoding/json.(*Decoder).readValue(0xc0003fb760, 0x0, 0x0, 0x25f2f80)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:140 +0x1e8
+encoding/json.(*Decoder).Decode(0xc0003fb760, 0x262f5c0, 0xc0007e25c0, 0x1038f1c, 0x2832e80)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:63 +0x79
+k8s.io/apimachinery/pkg/util/framer.(*jsonFrameReader).Read(0xc0007f44e0, 0xc000526c00, 0x400, 0x400, 0x2, 0x1, 0x38)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/framer/framer.go:150 +0x1a1
+k8s.io/apimachinery/pkg/runtime/serializer/streaming.(*decoder).Decode(0xc000094690, 0x0, 0x2c6fc00, 0xc0000897c0, 0xc000544780, 0x3, 0x0, 0xc000103408, 0xc0001034b8)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/runtime/serializer/streaming/streaming.go:77 +0x89
+k8s.io/client-go/rest/watch.(*Decoder).Decode(0xc0007e25a0, 0x12ff6a6, 0xc000193228, 0xc00041ff01, 0x3, 0x2, 0xc000339e00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/rest/watch/decoder.go:49 +0x6e
+k8s.io/apimachinery/pkg/watch.(*StreamWatcher).receive(0xc000089780)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:104 +0x147
+created by k8s.io/apimachinery/pkg/watch.NewStreamWatcher
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:71 +0xbe
+
+goroutine 205 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc0003fb0c0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc0003fb0b0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+golang.org/x/net/http2.(*pipe).Read(0xc0003fb0a8, 0xc0007e6200, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/pipe.go:65 +0x8f
+golang.org/x/net/http2.transportResponseBody.Read(0xc0003fb080, 0xc0007e6200, 0x200, 0x200, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/golang.org/x/net@v0.0.0-20200520004742-59133d7f0dd7/http2/transport.go:2027 +0xaf
+encoding/json.(*Decoder).refill(0xc0003fb4a0, 0xc0007e2540, 0x19)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:165 +0xeb
+encoding/json.(*Decoder).readValue(0xc0003fb4a0, 0x0, 0x0, 0x25f2f80)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:140 +0x1e8
+encoding/json.(*Decoder).Decode(0xc0003fb4a0, 0x262f5c0, 0xc0007e2540, 0x104802c, 0xc000544838)
+	/usr/local/Cellar/go/1.14.3/libexec/src/encoding/json/stream.go:63 +0x79
+k8s.io/apimachinery/pkg/util/framer.(*jsonFrameReader).Read(0xc0007f4360, 0xc000526800, 0x400, 0x400, 0x3, 0x1, 0x38)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/framer/framer.go:150 +0x1a1
+k8s.io/apimachinery/pkg/runtime/serializer/streaming.(*decoder).Decode(0xc0000945f0, 0x0, 0x2c6fc00, 0xc0000896c0, 0xc000053260, 0x0, 0xc00057c610, 0xc000401288, 0xc000437f78)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/runtime/serializer/streaming/streaming.go:77 +0x89
+k8s.io/client-go/rest/watch.(*Decoder).Decode(0xc0007e2520, 0xc00057c600, 0xc0005447e0, 0xc0005447e0, 0x0, 0x1, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/rest/watch/decoder.go:49 +0x6e
+k8s.io/apimachinery/pkg/watch.(*StreamWatcher).receive(0xc000089680)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:104 +0x147
+created by k8s.io/apimachinery/pkg/watch.NewStreamWatcher
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/watch/streamwatcher.go:71 +0xbe
+
+goroutine 228 [IO wait]:
+internal/poll.runtime_pollWait(0x471b870, 0x72, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/netpoll.go:203 +0x55
+internal/poll.(*pollDesc).wait(0xc0006f7318, 0x72, 0x0, 0x0, 0x28b8dbe)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:87 +0x45
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:92
+internal/poll.(*FD).Accept(0xc0006f7300, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_unix.go:384 +0x1d4
+net.(*netFD).accept(0xc0006f7300, 0xc00061cdf8, 0xc0002de000, 0x4176560)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/fd_unix.go:238 +0x42
+net.(*TCPListener).accept(0xc0005be0c0, 0xc00061ce38, 0x100eef8, 0x30)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/tcpsock_posix.go:139 +0x32
+net.(*TCPListener).Accept(0xc0005be0c0, 0x27884a0, 0xc0003e2690, 0x25ee440, 0x3b2ada0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/tcpsock.go:261 +0x64
+net/http.(*Server).Serve(0xc0001e20e0, 0x2c99ec0, 0xc0005be0c0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/server.go:2901 +0x25d
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).serveHealthProbes.func1(0xc0001e20e0, 0xc000207080)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:385 +0x4c
+created by sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).serveHealthProbes
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:384 +0x120
+
+goroutine 64 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/cache/internal.(*specificInformersMap).Start(0xc0002900e0, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/informers_map.go:143 +0x4c
+created by sigs.k8s.io/controller-runtime/pkg/cache/internal.(*InformersMap).Start
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/deleg_map.go:62 +0x80
+
+goroutine 268 [chan receive]:
+k8s.io/client-go/tools/cache.(*processorListener).run.func1.1(0xc00008b3d8, 0x2, 0x1)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:653 +0x54
+k8s.io/apimachinery/pkg/util/wait.ExponentialBackoff(0x989680, 0x3ff0000000000000, 0x3fb999999999999a, 0x5, 0x0, 0xc0001e4e18, 0x200c0001d81e0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:292 +0x51
+k8s.io/client-go/tools/cache.(*processorListener).run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:652 +0x79
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000418f60)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0001e4f60, 0xdf8475800, 0x0, 0x1, 0xc000545140)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*processorListener).run(0xc00073bc00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:650 +0x9b
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00044e370, 0xc0003f9dc0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 218 [syscall]:
+os/signal.signal_recv(0xc00051b8f0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sigqueue.go:144 +0x96
+os/signal.loop()
+	/usr/local/Cellar/go/1.14.3/libexec/src/os/signal/signal_unix.go:23 +0x22
+created by os/signal.Notify.func1
+	/usr/local/Cellar/go/1.14.3/libexec/src/os/signal/signal.go:127 +0x44
+
+goroutine 227 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start(0xc00060c840, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:203 +0xd0
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).startLeaderElectionRunnables.func1(0x2c603a0, 0xc00060c840, 0xc000207080)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:473 +0x49
+created by sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).startLeaderElectionRunnables
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:472 +0xd7
+
+goroutine 306 [select]:
+k8s.io/client-go/tools/cache.(*processorListener).pop(0xc000543a80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:621 +0x15a
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00044f870, 0xc00052eb20)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 266 [chan receive]:
+k8s.io/client-go/tools/cache.(*processorListener).run.func1.1(0xc0000539d8, 0x2, 0x1)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:653 +0x54
+k8s.io/apimachinery/pkg/util/wait.ExponentialBackoff(0x989680, 0x3ff0000000000000, 0x3fb999999999999a, 0x5, 0x0, 0xc0001e5e18, 0x200c00013d380, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:292 +0x51
+k8s.io/client-go/tools/cache.(*processorListener).run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:652 +0x79
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc00042a760)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0001e5f60, 0xdf8475800, 0x0, 0x1, 0xc0005450e0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*processorListener).run(0xc00073bb80)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:650 +0x9b
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00013ad10, 0xc0003f9bf0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 65 [chan receive]:
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start(0xc00060c540, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:203 +0xd0
+sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).startLeaderElectionRunnables.func1(0x2c603a0, 0xc00060c540, 0xc000207080)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:473 +0x49
+created by sigs.k8s.io/controller-runtime/pkg/manager.(*controllerManager).startLeaderElectionRunnables
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/manager/internal.go:472 +0xd7
+
+goroutine 252 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000145910, 0x2)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000145900)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc000181380, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c6c0, 0xc000206300)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c6c0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc0001154f0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0001154f0, 0x3b9aca00, 0x0, 0x2979f01, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc0001154f0, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 224 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).watchHandler(0xc0006660b0, 0x2c6ffc0, 0xc000089680, 0xc000343b90, 0xc00050ea20, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:354 +0x1e2
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch(0xc0006660b0, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:320 +0x8b3
+k8s.io/client-go/tools/cache.(*Reflector).Run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:152 +0x33
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000419f10)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000343f10, 0x3b9aca00, 0x0, 0x2c9f401, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*Reflector).Run(0xc0006660b0, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:151 +0x16b
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc000046220, 0xc000312080)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 192 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc0001602e8, 0x1)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc0001602d8)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/tools/cache.(*DeltaFIFO).Pop(0xc0001602c0, 0xc000187530, 0x0, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/delta_fifo.go:409 +0xa0
+k8s.io/client-go/tools/cache.(*controller).processLoop(0xc0007e1580)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:153 +0x40
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000619e68)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000619e68, 0x3b9aca00, 0x0, 0xc0001cc001, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*controller).Run(0xc0007e1580, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:125 +0x2c1
+k8s.io/client-go/tools/cache.(*sharedIndexInformer).Run(0xc0006e8480, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:331 +0x3f9
+created by sigs.k8s.io/controller-runtime/pkg/cache/internal.(*specificInformersMap).addInformerToMap
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/cache/internal/informers_map.go:224 +0x3fa
+
+goroutine 260 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch.func2(0xc0006660b0, 0xc000636900, 0xc00067ab40, 0xc00050ea20)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:260 +0x14a
+created by k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:254 +0x249
+
+goroutine 284 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch.func2(0xc000160370, 0xc000636900, 0xc000052a20, 0xc00057da40)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:260 +0x14a
+created by k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:254 +0x249
+
+goroutine 190 [select]:
+k8s.io/client-go/tools/cache.(*processorListener).pop(0xc000176400)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:621 +0x15a
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00013aed0, 0xc00045b7c0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 259 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch.func2(0xc000666a50, 0xc000636900, 0xc00067a9c0, 0xc00050e780)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:260 +0x14a
+created by k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:254 +0x249
+
+goroutine 243 [chan receive]:
+k8s.io/client-go/tools/cache.(*sharedProcessor).run(0xc00013ae70, 0xc00067a540)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:529 +0x53
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc000800570, 0xc00062ea20)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 244 [chan receive]:
+k8s.io/client-go/tools/cache.(*controller).Run.func1(0xc000636900, 0xc0005bd080)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:104 +0x34
+created by k8s.io/client-go/tools/cache.(*controller).Run
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/controller.go:103 +0xac
+
+goroutine 245 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).watchHandler(0xc000666bb0, 0x2c6ffc0, 0xc000089780, 0xc0007f1b90, 0xc0001f2480, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:354 +0x1e2
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch(0xc000666bb0, 0xc000636900, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:320 +0x8b3
+k8s.io/client-go/tools/cache.(*Reflector).Run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:152 +0x33
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000060710)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0007f1f10, 0x3b9aca00, 0x0, 0xc00062e901, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*Reflector).Run(0xc000666bb0, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:151 +0x16b
+k8s.io/apimachinery/pkg/util/wait.(*Group).StartWithChannel.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:54 +0x2e
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc000800590, 0xc00062ea60)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 202 [select]:
+k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch.func2(0xc000666bb0, 0xc000636900, 0xc000544960, 0xc0001f2480)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:260 +0x14a
+created by k8s.io/client-go/tools/cache.(*Reflector).ListAndWatch
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/reflector.go:254 +0x249
+
+goroutine 189 [chan receive]:
+k8s.io/client-go/tools/cache.(*processorListener).run.func1.1(0xc00062a3c0, 0x21, 0xc00062a3c0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:653 +0x54
+k8s.io/apimachinery/pkg/util/wait.ExponentialBackoff(0x989680, 0x3ff0000000000000, 0x3fb999999999999a, 0x5, 0x0, 0xc000556e18, 0x10485a9, 0xc00041df60)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:292 +0x51
+k8s.io/client-go/tools/cache.(*processorListener).run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:652 +0x79
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc00041df60)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000556f60, 0xdf8475800, 0x0, 0x2979601, 0xc000052300)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*processorListener).run(0xc000176400)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:650 +0x9b
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc00013aed0, 0xc00045b7b0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 250 [chan receive]:
+k8s.io/client-go/tools/cache.(*processorListener).run.func1.1(0x3, 0xc00041cef2, 0x3)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:653 +0x54
+k8s.io/apimachinery/pkg/util/wait.ExponentialBackoff(0x989680, 0x3ff0000000000000, 0x3fb999999999999a, 0x5, 0x0, 0xc00041ce18, 0xa, 0xa)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:292 +0x51
+k8s.io/client-go/tools/cache.(*processorListener).run.func1()
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:652 +0x79
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc00041cf60)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc00041cf60, 0xdf8475800, 0x0, 0x1, 0xc00067ac00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(...)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88
+k8s.io/client-go/tools/cache.(*processorListener).run(0xc0005bdc00)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/tools/cache/shared_informer.go:650 +0x9b
+k8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1(0xc0002ba3e0, 0xc0001151a0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:71 +0x51
+created by k8s.io/apimachinery/pkg/util/wait.(*Group).Start
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:69 +0x62
+
+goroutine 272 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x2)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc0003f9fb0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0003f9fb0, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc0003f9fb0, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 273 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x3)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0xc000614400)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc0003f9fc0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc0003f9fc0, 0x3b9aca00, 0x0, 0xc00013c401, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc0003f9fc0, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 322 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x4)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0xc000614300)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000770000)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000770000, 0x3b9aca00, 0x0, 0xc000046801, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000770000, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 323 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x5)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000770010)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000770010, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000770010, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 324 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x6)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000770020)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000770020, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000770020, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 325 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x7)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000770030)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000770030, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000770030, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 326 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x8)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000770040)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000770040, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000770040, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 327 [sync.Cond.Wait]:
+runtime.goparkunlock(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/proc.go:310
+sync.runtime_notifyListWait(0xc000638810, 0x1)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/sema.go:513 +0xf8
+sync.(*Cond).Wait(0xc000638800)
+	/usr/local/Cellar/go/1.14.3/libexec/src/sync/cond.go:56 +0x9d
+k8s.io/client-go/util/workqueue.(*Type).Get(0xc00057de00, 0x0, 0x0, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/client-go@v0.17.2/util/workqueue/queue.go:145 +0x89
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem(0xc00060c540, 0x0)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:218 +0x4f
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker(0xc00060c540)
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:211 +0x2b
+k8s.io/apimachinery/pkg/util/wait.JitterUntil.func1(0xc000770050)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:152 +0x5f
+k8s.io/apimachinery/pkg/util/wait.JitterUntil(0xc000770050, 0x3b9aca00, 0x0, 0x1, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:153 +0xf8
+k8s.io/apimachinery/pkg/util/wait.Until(0xc000770050, 0x3b9aca00, 0xc000636900)
+	/Users/shangxiangfan/go/pkg/mod/k8s.io/apimachinery@v0.17.2/pkg/util/wait/wait.go:88 +0x4d
+created by sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func1
+	/Users/shangxiangfan/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.5.2/pkg/internal/controller/controller.go:193 +0x305
+
+goroutine 336 [select]:
+net/http.(*persistConn).writeLoop(0xc00014e6c0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:2277 +0x11c
+created by net/http.(*Transport).dialConn
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:1648 +0xc7b
+
+goroutine 332 [IO wait]:
+internal/poll.runtime_pollWait(0x471b790, 0x72, 0xffffffffffffffff)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/netpoll.go:203 +0x55
+internal/poll.(*pollDesc).wait(0xc00073bd98, 0x72, 0x1700, 0x1738, 0xffffffffffffffff)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:87 +0x45
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:92
+internal/poll.(*FD).Read(0xc00073bd80, 0xc0003da800, 0x1738, 0x1738, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_unix.go:169 +0x201
+net.(*netFD).Read(0xc00073bd80, 0xc0003da800, 0x1738, 0x1738, 0x203000, 0x1163acb, 0xc00055d09c)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/fd_unix.go:202 +0x4f
+net.(*conn).Read(0xc0005284e0, 0xc0003da800, 0x1738, 0x1738, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/net.go:184 +0x8e
+crypto/tls.(*atLeastReader).Read(0xc000881f40, 0xc0003da800, 0x1738, 0x1738, 0xc000077920, 0x10199be, 0xc000077918)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:760 +0x60
+bytes.(*Buffer).ReadFrom(0xc00028fad8, 0x2c5e620, 0xc000881f40, 0x100c4a5, 0x2645aa0, 0x2840240)
+	/usr/local/Cellar/go/1.14.3/libexec/src/bytes/buffer.go:204 +0xb1
+crypto/tls.(*Conn).readFromUntil(0xc00028f880, 0x471bb10, 0xc0005284e0, 0x5, 0xc0005284e0, 0x100e686)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:782 +0xec
+crypto/tls.(*Conn).readRecordOrCCS(0xc00028f880, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:589 +0x115
+crypto/tls.(*Conn).readRecord(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:557
+crypto/tls.(*Conn).Read(0xc00028f880, 0xc00055d000, 0x1000, 0x1000, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:1233 +0x15b
+net/http.(*persistConn).Read(0xc0006e0000, 0xc00055d000, 0x1000, 0x1000, 0xc000052e40, 0xc000077c70, 0x1007025)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:1825 +0x75
+bufio.(*Reader).fill(0xc00008a7e0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/bufio/bufio.go:100 +0x103
+bufio.(*Reader).Peek(0xc00008a7e0, 0x1, 0x0, 0x0, 0x1, 0xc000636000, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/bufio/bufio.go:138 +0x4f
+net/http.(*persistConn).readLoop(0xc0006e0000)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:1978 +0x1a8
+created by net/http.(*Transport).dialConn
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:1647 +0xc56
+
+goroutine 333 [select]:
+net/http.(*persistConn).writeLoop(0xc0006e0000)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:2277 +0x11c
+created by net/http.(*Transport).dialConn
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:1648 +0xc7b
+
+goroutine 335 [IO wait]:
+internal/poll.runtime_pollWait(0x471b6b0, 0x72, 0xffffffffffffffff)
+	/usr/local/Cellar/go/1.14.3/libexec/src/runtime/netpoll.go:203 +0x55
+internal/poll.(*pollDesc).wait(0xc00059a618, 0x72, 0x1700, 0x1798, 0xffffffffffffffff)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:87 +0x45
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_poll_runtime.go:92
+internal/poll.(*FD).Read(0xc00059a600, 0xc0001a5800, 0x1798, 0x1798, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/internal/poll/fd_unix.go:169 +0x201
+net.(*netFD).Read(0xc00059a600, 0xc0001a5800, 0x1798, 0x1798, 0x203000, 0x400, 0x400)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/fd_unix.go:202 +0x4f
+net.(*conn).Read(0xc000010008, 0xc0001a5800, 0x1798, 0x1798, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/net.go:184 +0x8e
+crypto/tls.(*atLeastReader).Read(0xc0008b6080, 0xc0001a5800, 0x1798, 0x1798, 0x80, 0x3b765f8, 0xc000843918)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:760 +0x60
+bytes.(*Buffer).ReadFrom(0xc0000a45d8, 0x2c5e620, 0xc0008b6080, 0x100c4a5, 0x2645aa0, 0x2840240)
+	/usr/local/Cellar/go/1.14.3/libexec/src/bytes/buffer.go:204 +0xb1
+crypto/tls.(*Conn).readFromUntil(0xc0000a4380, 0x471bb10, 0xc000010008, 0x5, 0xc000010008, 0xc000528028)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:782 +0xec
+crypto/tls.(*Conn).readRecordOrCCS(0xc0000a4380, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:589 +0x115
+crypto/tls.(*Conn).readRecord(...)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:557
+crypto/tls.(*Conn).Read(0xc0000a4380, 0xc0007dd000, 0x1000, 0x1000, 0x0, 0x0, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/crypto/tls/conn.go:1233 +0x15b
+net/http.(*persistConn).Read(0xc00014e6c0, 0xc0007dd000, 0x1000, 0x1000, 0xc000636780, 0xc000843c70, 0x1007025)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:1825 +0x75
+bufio.(*Reader).fill(0xc0001f2f00)
+	/usr/local/Cellar/go/1.14.3/libexec/src/bufio/bufio.go:100 +0x103
+bufio.(*Reader).Peek(0xc0001f2f00, 0x1, 0x0, 0x0, 0x1, 0xc000053400, 0x0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/bufio/bufio.go:138 +0x4f
+net/http.(*persistConn).readLoop(0xc00014e6c0)
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:1978 +0x1a8
+created by net/http.(*Transport).dialConn
+	/usr/local/Cellar/go/1.14.3/libexec/src/net/http/transport.go:1647 +0xc56

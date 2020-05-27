@@ -61,7 +61,6 @@ func (s *Service) reconcileSecurityGroups() error {
 
 	// Declare all security group roles that the reconcile loop takes care of.
 	roles := []infrav1.SecurityGroupRole{
-		infrav1.SecurityGroupBastion,
 		infrav1.SecurityGroupAPIServerLB,
 		infrav1.SecurityGroupLB,
 		infrav1.SecurityGroupControlPlane,
@@ -195,11 +194,11 @@ func (s *Service) deleteSecurityGroup(sg *infrav1.SecurityGroup, typ string) err
 	}
 
 	if _, err := s.scope.EC2.DeleteSecurityGroup(input); awserrors.IsIgnorableSecurityGroupError(err) != nil {
-		record.Warnf(s.scope.AWSCluster, "FailedDeleteSecurityGroup", "Failed to delete %s SecurityGroup %q: %v", typ, sg.ID, err)
+		record.Warnf(s.scope.TenantConfig, "FailedDeleteSecurityGroup", "Failed to delete %s SecurityGroup %q: %v", typ, sg.ID, err)
 		return errors.Wrapf(err, "failed to delete security group %q", sg.ID)
 	}
 
-	record.Eventf(s.scope.AWSCluster, "SuccessfulDeleteSecurityGroup", "Deleted %s SecurityGroup %q", typ, sg.ID)
+	record.Eventf(s.scope.TenantConfig, "SuccessfulDeleteSecurityGroup", "Deleted %s SecurityGroup %q", typ, sg.ID)
 	s.scope.V(2).Info("Deleted security group", "security-group-id", sg.ID, "kind", typ)
 
 	return nil
@@ -273,11 +272,11 @@ func (s *Service) createSecurityGroup(role infrav1.SecurityGroupRole, input *ec2
 	})
 
 	if err != nil {
-		record.Warnf(s.scope.AWSCluster, "FailedCreateSecurityGroup", "Failed to create managed SecurityGroup for Role %q: %v", role, err)
+		record.Warnf(s.scope.TenantConfig, "FailedCreateSecurityGroup", "Failed to create managed SecurityGroup for Role %q: %v", role, err)
 		return errors.Wrapf(err, "failed to create security group %q in vpc %q", role, aws.StringValue(input.VpcId))
 	}
 
-	record.Eventf(s.scope.AWSCluster, "SuccessfulCreateSecurityGroup", "Created managed SecurityGroup %q for Role %q", aws.StringValue(out.GroupId), role)
+	record.Eventf(s.scope.TenantConfig, "SuccessfulCreateSecurityGroup", "Created managed SecurityGroup %q for Role %q", aws.StringValue(out.GroupId), role)
 
 	// Set the group id.
 	input.GroupId = out.GroupId
@@ -292,11 +291,11 @@ func (s *Service) createSecurityGroup(role infrav1.SecurityGroupRole, input *ec2
 		}
 		return true, nil
 	}, awserrors.GroupNotFound); err != nil {
-		record.Warnf(s.scope.AWSCluster, "FailedTagSecurityGroup", "Failed to tag managed SecurityGroup %q: %v", aws.StringValue(out.GroupId), err)
+		record.Warnf(s.scope.TenantConfig, "FailedTagSecurityGroup", "Failed to tag managed SecurityGroup %q: %v", aws.StringValue(out.GroupId), err)
 		return errors.Wrapf(err, "failed to tag security group %q in vpc %q", aws.StringValue(out.GroupId), aws.StringValue(input.VpcId))
 	}
 
-	record.Eventf(s.scope.AWSCluster, "SuccessfulTagSecurityGroup", "Tagged managed SecurityGroup %q", aws.StringValue(out.GroupId))
+	record.Eventf(s.scope.TenantConfig, "SuccessfulTagSecurityGroup", "Tagged managed SecurityGroup %q", aws.StringValue(out.GroupId))
 	return nil
 }
 
@@ -307,11 +306,11 @@ func (s *Service) authorizeSecurityGroupIngressRules(id string, rules infrav1.In
 	}
 
 	if _, err := s.scope.EC2.AuthorizeSecurityGroupIngress(input); err != nil {
-		record.Warnf(s.scope.AWSCluster, "FailedAuthorizeSecurityGroupIngressRules", "Failed to authorize security group ingress rules %v for SecurityGroup %q: %v", rules, id, err)
+		record.Warnf(s.scope.TenantConfig, "FailedAuthorizeSecurityGroupIngressRules", "Failed to authorize security group ingress rules %v for SecurityGroup %q: %v", rules, id, err)
 		return errors.Wrapf(err, "failed to authorize security group %q ingress rules: %v", id, rules)
 	}
 
-	record.Eventf(s.scope.AWSCluster, "SuccessfulAuthorizeSecurityGroupIngressRules", "Authorized security group ingress rules %v for SecurityGroup %q", rules, id)
+	record.Eventf(s.scope.TenantConfig, "SuccessfulAuthorizeSecurityGroupIngressRules", "Authorized security group ingress rules %v for SecurityGroup %q", rules, id)
 	return nil
 }
 
@@ -322,11 +321,11 @@ func (s *Service) revokeSecurityGroupIngressRules(id string, rules infrav1.Ingre
 	}
 
 	if _, err := s.scope.EC2.RevokeSecurityGroupIngress(input); err != nil {
-		record.Warnf(s.scope.AWSCluster, "FailedRevokeSecurityGroupIngressRules", "Failed to revoke security group ingress rules %v for SecurityGroup %q: %v", rules, id, err)
+		record.Warnf(s.scope.TenantConfig, "FailedRevokeSecurityGroupIngressRules", "Failed to revoke security group ingress rules %v for SecurityGroup %q: %v", rules, id, err)
 		return errors.Wrapf(err, "failed to revoke security group %q ingress rules: %v", id, rules)
 	}
 
-	record.Eventf(s.scope.AWSCluster, "SuccessfulRevokeSecurityGroupIngressRules", "Revoked security group ingress rules %v for SecurityGroup %q", rules, id)
+	record.Eventf(s.scope.TenantConfig, "SuccessfulRevokeSecurityGroupIngressRules", "Revoked security group ingress rules %v for SecurityGroup %q", rules, id)
 	return nil
 }
 
@@ -345,41 +344,30 @@ func (s *Service) revokeAllSecurityGroupIngressRules(id string) error {
 				IpPermissions: sg.IpPermissions,
 			}
 			if _, err := s.scope.EC2.RevokeSecurityGroupIngress(revokeInput); err != nil {
-				record.Warnf(s.scope.AWSCluster, "FailedRevokeSecurityGroupIngressRules", "Failed to revoke all security group ingress rules for SecurityGroup %q: %v", *sg.GroupId, err)
+				record.Warnf(s.scope.TenantConfig, "FailedRevokeSecurityGroupIngressRules", "Failed to revoke all security group ingress rules for SecurityGroup %q: %v", *sg.GroupId, err)
 				return errors.Wrapf(err, "failed to revoke security group %q ingress rules", id)
 			}
-			record.Eventf(s.scope.AWSCluster, "SuccessfulRevokeSecurityGroupIngressRules", "Revoked all security group ingress rules for SecurityGroup %q", *sg.GroupId)
+			record.Eventf(s.scope.TenantConfig, "SuccessfulRevokeSecurityGroupIngressRules", "Revoked all security group ingress rules for SecurityGroup %q", *sg.GroupId)
 		}
 	}
 
 	return nil
 }
 
-func (s *Service) defaultSSHIngressRule(sourceSecurityGroupID string) *infrav1.IngressRule {
+func (s *Service) defaultSSHIngressRule() *infrav1.IngressRule {
 	return &infrav1.IngressRule{
-		Description:            "SSH",
-		Protocol:               infrav1.SecurityGroupProtocolTCP,
-		FromPort:               22,
-		ToPort:                 22,
-		SourceSecurityGroupIDs: []string{sourceSecurityGroupID},
+		Description: "SSH",
+		Protocol:    infrav1.SecurityGroupProtocolTCP,
+		FromPort:    22,
+		ToPort:      22,
 	}
 }
 
 func (s *Service) getSecurityGroupIngressRules(role infrav1.SecurityGroupRole) (infrav1.IngressRules, error) {
 	switch role {
-	case infrav1.SecurityGroupBastion:
-		return infrav1.IngressRules{
-			{
-				Description: "SSH",
-				Protocol:    infrav1.SecurityGroupProtocolTCP,
-				FromPort:    22,
-				ToPort:      22,
-				CidrBlocks:  []string{anyIPv4CidrBlock},
-			},
-		}, nil
 	case infrav1.SecurityGroupControlPlane:
 		return infrav1.IngressRules{
-			s.defaultSSHIngressRule(s.scope.SecurityGroups()[infrav1.SecurityGroupBastion].ID),
+			s.defaultSSHIngressRule(),
 			{
 				Description: "Kubernetes API",
 				Protocol:    infrav1.SecurityGroupProtocolTCP,
@@ -429,7 +417,7 @@ func (s *Service) getSecurityGroupIngressRules(role infrav1.SecurityGroupRole) (
 
 	case infrav1.SecurityGroupNode:
 		return infrav1.IngressRules{
-			s.defaultSSHIngressRule(s.scope.SecurityGroups()[infrav1.SecurityGroupBastion].ID),
+			s.defaultSSHIngressRule(),
 			{
 				Description: "Node Port Services",
 				Protocol:    infrav1.SecurityGroupProtocolTCP,
@@ -474,8 +462,8 @@ func (s *Service) getSecurityGroupIngressRules(role infrav1.SecurityGroupRole) (
 			{
 				Description: "Kubernetes API",
 				Protocol:    infrav1.SecurityGroupProtocolTCP,
-				FromPort:    int64(s.scope.APIServerPort()),
-				ToPort:      int64(s.scope.APIServerPort()),
+				FromPort:    int64(s.scope.ClusterScope.APIServerPort()),
+				ToPort:      int64(s.scope.ClusterScope.APIServerPort()),
 				CidrBlocks:  []string{anyIPv4CidrBlock},
 			},
 		}, nil

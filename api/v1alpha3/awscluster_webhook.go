@@ -30,7 +30,7 @@ import (
 )
 
 // log is for logging in this package.
-var _ = logf.Log.WithName("awscluster-resource")
+var awsclusterlog = logf.Log.WithName("awscluster-resource")
 
 func (r *AWSCluster) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewWebhookManagedBy(mgr).
@@ -43,7 +43,16 @@ func (r *AWSCluster) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &AWSCluster{}
 
 func (r *AWSCluster) ValidateCreate() error {
-	return nil
+	awsclusterlog.Info("validate create", "name", r.Name, "namespace", r.Namespace)
+	var allErrs field.ErrorList
+
+	if len(r.Spec.TenantConfigName) <= 0 {
+		allErrs = append(allErrs,
+			field.Invalid(field.NewPath("spec", "tenantConfigName"), r.Spec.TenantConfigName, "field is not null"),
+		)
+	}
+
+	return aggregateObjErrors(r.GroupVersionKind().GroupKind(), r.Name, allErrs)
 }
 
 func (r *AWSCluster) ValidateDelete() error {
@@ -51,25 +60,12 @@ func (r *AWSCluster) ValidateDelete() error {
 }
 
 func (r *AWSCluster) ValidateUpdate(old runtime.Object) error {
-	var allErrs field.ErrorList
-
 	oldC, ok := old.(*AWSCluster)
 	if !ok {
-		return apierrors.NewBadRequest(fmt.Sprintf("expected an AWSCluster but got a %T", old))
+		return apierrors.NewBadRequest(fmt.Sprintf("expected an TenantConfig but got a %T", old))
 	}
 
-	if r.Spec.Region != oldC.Spec.Region {
-		allErrs = append(allErrs,
-			field.Invalid(field.NewPath("spec", "region"), r.Spec.Region, "field is immutable"),
-		)
-	}
-
-	if !reflect.DeepEqual(r.Spec.ControlPlaneLoadBalancer, oldC.Spec.ControlPlaneLoadBalancer) {
-		allErrs = append(allErrs,
-			field.Invalid(field.NewPath("spec", "controlPlaneLoadBalancer"),
-				r.Spec.ControlPlaneLoadBalancer, "field is immutable"),
-		)
-	}
+	var allErrs field.ErrorList
 
 	if !reflect.DeepEqual(oldC.Spec.ControlPlaneEndpoint, clusterv1.APIEndpoint{}) &&
 		!reflect.DeepEqual(r.Spec.ControlPlaneEndpoint, oldC.Spec.ControlPlaneEndpoint) {
@@ -77,6 +73,10 @@ func (r *AWSCluster) ValidateUpdate(old runtime.Object) error {
 			field.Invalid(field.NewPath("spec", "controlPlaneEndpoint"), r.Spec.ControlPlaneEndpoint, "field is immutable"),
 		)
 	}
-
+	if !reflect.DeepEqual(oldC.Spec.TenantConfigName, r.Spec.TenantConfigName) {
+		allErrs = append(allErrs,
+			field.Invalid(field.NewPath("spec", "tenantConfigName"), r.Spec.TenantConfigName, "field is immutable"),
+		)
+	}
 	return aggregateObjErrors(r.GroupVersionKind().GroupKind(), r.Name, allErrs)
 }

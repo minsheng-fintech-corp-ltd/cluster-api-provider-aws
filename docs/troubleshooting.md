@@ -12,12 +12,6 @@ Verifying kubelet status and logs may also provide hints:
 journalctl -u kubelet.service
 systemctl status kubelet
 ```
-For reaching controller host from your local machine:
-```bash
- ssh -i <private-key> -o "ProxyCommand ssh -W %h:%p -i <private-key> ubuntu@<bastion-IP>" ubuntu@<controller-host-IP>
- ```
-
-`private-key` is the private key from the key-pair discussed in the `ssh key pair` section above.
 
 ## kubelet on the control plane host failing with error: NoCredentialProviders
 ```bash

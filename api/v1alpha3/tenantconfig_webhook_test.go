@@ -18,53 +18,46 @@ package v1alpha3
 
 import (
 	"testing"
-
-	clusterv1 "sigs.k8s.io/cluster-api/api/v1alpha3"
 )
 
-func TestAWSCluster_ValidateUpdate(t *testing.T) {
+func TestTenantConfig_ValidateUpdate(t *testing.T) {
 	tests := []struct {
 		name       string
-		oldCluster *AWSCluster
-		newCluster *AWSCluster
+		oldCluster *TenantConfig
+		newCluster *TenantConfig
 		wantErr    bool
 	}{
 		{
-			name: "controlPlaneEndpoint is immutable",
-			oldCluster: &AWSCluster{
-				Spec: AWSClusterSpec{
-					ControlPlaneEndpoint: clusterv1.APIEndpoint{
-						Host: "example.com",
-						Port: int32(8000),
-					},
+			name: "region is immutable",
+			oldCluster: &TenantConfig{
+				Spec: TenantConfigSpec{
+					Region: "us-east-1",
 				},
 			},
-			newCluster: &AWSCluster{
-				Spec: AWSClusterSpec{
-					ControlPlaneEndpoint: clusterv1.APIEndpoint{
-						Host: "foo.example.com",
-						Port: int32(9000),
-					},
+			newCluster: &TenantConfig{
+				Spec: TenantConfigSpec{
+					Region: "us-east-2",
 				},
 			},
 			wantErr: true,
 		},
 		{
-			name: "controlPlaneEndpoint can be updated if it is empty",
-			oldCluster: &AWSCluster{
-				Spec: AWSClusterSpec{
-					ControlPlaneEndpoint: clusterv1.APIEndpoint{},
-				},
-			},
-			newCluster: &AWSCluster{
-				Spec: AWSClusterSpec{
-					ControlPlaneEndpoint: clusterv1.APIEndpoint{
-						Host: "example.com",
-						Port: int32(8000),
+			name: "controlPlaneLoadBalancer is immutable",
+			oldCluster: &TenantConfig{
+				Spec: TenantConfigSpec{
+					ControlPlaneLoadBalancer: &AWSLoadBalancerSpec{
+						Scheme: &ClassicELBSchemeInternal,
 					},
 				},
 			},
-			wantErr: false,
+			newCluster: &TenantConfig{
+				Spec: TenantConfigSpec{
+					ControlPlaneLoadBalancer: &AWSLoadBalancerSpec{
+						Scheme: &ClassicELBSchemeInternetFacing,
+					},
+				},
+			},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {

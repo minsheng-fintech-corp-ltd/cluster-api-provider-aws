@@ -3,15 +3,6 @@ domain: cluster.x-k8s.io
 repo: sigs.k8s.io/cluster-api-provider-aws
 resources:
 - group: infrastructure
-  version: v1alpha2
-  kind: AWSMachine
-- group: infrastructure
-  version: v1alpha2
-  kind: AWSCluster
-- group: infrastructure
-  version: v1alpha2
-  kind: AWSMachineTemplate
-- group: infrastructure
   version: v1alpha3
   kind: AWSMachine
 - group: infrastructure
@@ -20,3 +11,7 @@ resources:
 - group: infrastructure
   version: v1alpha3
   kind: AWSMachineTemplate
+- group: infrastructure
+  kind: TenantConfig
+  version: v1alpha3
+version: "2"

@@ -704,7 +704,7 @@ func TestDiscoverSubnets(t *testing.T) {
 				t.Fatalf("got an unexpected error: %v", err)
 			}
 
-			subnets := s.scope.AWSCluster.Spec.NetworkSpec.Subnets
+			subnets := s.scope.TenantConfig.Spec.NetworkSpec.Subnets
 			out := make(map[string]*infrav1.SubnetSpec)
 			for _, sn := range subnets {
 				out[sn.ID] = sn

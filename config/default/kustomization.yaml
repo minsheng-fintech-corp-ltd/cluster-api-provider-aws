@@ -2,11 +2,13 @@ namespace: capa-system
 
 resources:
 - namespace.yaml
-- credentials.yaml
+# - credentials.yaml
 
 bases:
 - ../rbac
 - ../manager
 
 patchesStrategicMerge:
-- manager_credentials_patch.yaml
+#  - manager_credentials_patch.yaml
+  - manager_prometheus_metrics_patch.yaml
+  - manager_role_aggregation_patch.yaml

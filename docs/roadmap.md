@@ -10,9 +10,8 @@ This roadmap is a constant work in progress, subject to frequent revision. Dates
 
 - Updates for Cluster API v1alpha3
 - Add support for `clusterctl` v2
-- [Disable creation of bastion host by default](https://github.com/kubernetes-sigs/cluster-api-provider-aws/issues/947)
 - [Ability to configure node disks](https://github.com/kubernetes-sigs/cluster-api-provider-aws/issues/1403)
-- [SSM integration (alternative to bastion host)](https://github.com/kubernetes-sigs/cluster-api-provider-aws/issues/1553)
+- [SSM integration](https://github.com/kubernetes-sigs/cluster-api-provider-aws/issues/1553)
 - [Encrypted user-data](https://github.com/kubernetes-sigs/cluster-api-provider-aws/issues/1387)
 - [Support for cross-zone load balancing](https://github.com/kubernetes-sigs/cluster-api-provider-aws/issues/1416)
 - [Private API-server load balancer](https://github.com/kubernetes-sigs/cluster-api-provider-aws/issues/873)
