@@ -24,11 +24,12 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	kerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/client-go/tools/record"
 	infrav1 "sigs.k8s.io/cluster-api-provider-aws/api/v1alpha3"
 	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/scope"
-	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/services/ec2"
-	"sigs.k8s.io/cluster-api-provider-aws/pkg/cloud/services/elb"
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1alpha3"
 	"sigs.k8s.io/cluster-api/util"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -47,6 +48,7 @@ type AWSClusterReconciler struct {
 	client.Client
 	Recorder record.EventRecorder
 	Log      logr.Logger
+	Scheme   *runtime.Scheme
 }
 
 // +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=awsclusters,verbs=get;list;watch;create;update;patch;delete
@@ -67,25 +69,12 @@ func (r *AWSClusterReconciler) Reconcile(req ctrl.Request) (_ ctrl.Result, reter
 		return reconcile.Result{}, err
 	}
 
-	// Fetch the Cluster.
+	// Fetch the owner Cluster.
 	cluster, err := util.GetOwnerCluster(ctx, r.Client, awsCluster.ObjectMeta)
 	if err != nil {
 		return reconcile.Result{}, err
 	}
 
-	if cluster == nil {
-		log.Info("Cluster Controller has not yet set OwnerRef")
-		return reconcile.Result{}, nil
-	}
-
-	if util.IsPaused(cluster, awsCluster) {
-		log.Info("AWSCluster or linked Cluster is marked as paused. Won't reconcile")
-		return reconcile.Result{}, nil
-	}
-
-	log = log.WithValues("cluster", cluster.Name)
-
-	// Create the scope.
 	clusterScope, err := scope.NewClusterScope(scope.ClusterScopeParams{
 		Client:     r.Client,
 		Logger:     log,
@@ -93,108 +82,65 @@ func (r *AWSClusterReconciler) Reconcile(req ctrl.Request) (_ ctrl.Result, reter
 		AWSCluster: awsCluster,
 	})
 	if err != nil {
-		return reconcile.Result{}, errors.Errorf("failed to create scope: %+v", err)
+		return ctrl.Result{}, err
 	}
-
-	// Always close the scope when exiting this function so we can persist any AWSCluster changes.
 	defer func() {
-		if err := clusterScope.Close(); err != nil && reterr == nil {
-			reterr = err
-		}
+		reterr = kerrors.NewAggregate([]error{reterr, clusterScope.Close()})
 	}()
 
 	// Handle deleted clusters
 	if !awsCluster.DeletionTimestamp.IsZero() {
-		return reconcileDelete(clusterScope)
+		// Cluster is deleted so remove the finalizer.
+		//TODO: delete all tenantConfigs before cluster is delted.
+		controllerutil.RemoveFinalizer(awsCluster, infrav1.ClusterFinalizer)
+		return ctrl.Result{}, nil
 	}
 
-	// Handle non-deleted clusters
-	return reconcileNormal(clusterScope)
-}
-
-// TODO(ncdc): should this be a function on ClusterScope?
-func reconcileDelete(clusterScope *scope.ClusterScope) (reconcile.Result, error) {
-	clusterScope.Info("Reconciling AWSCluster delete")
-
-	ec2svc := ec2.NewService(clusterScope)
-	elbsvc := elb.NewService(clusterScope)
-	awsCluster := clusterScope.AWSCluster
-
-	if err := elbsvc.DeleteLoadbalancers(); err != nil {
-		return reconcile.Result{}, errors.Wrapf(err, "error deleting load balancer for AWSCluster %s/%s", awsCluster.Namespace, awsCluster.Name)
+	log = log.WithValues("cluster", cluster.Name)
+	if cluster == nil {
+		log.Info("Cluster Controller has not yet set OwnerRef")
+		return ctrl.Result{}, nil
 	}
 
-	if err := ec2svc.DeleteBastion(); err != nil {
-		return reconcile.Result{}, errors.Wrapf(err, "error deleting bastion for AWSCluster %s/%s", awsCluster.Namespace, awsCluster.Name)
+	// ensure tenant config
+	tenantConfig := &infrav1.TenantConfig{
+		ObjectMeta: v1.ObjectMeta{
+			Name:      awsCluster.Spec.TenantConfigName,
+			Namespace: awsCluster.Namespace,
+		},
 	}
 
-	if err := ec2svc.DeleteNetwork(); err != nil {
-		return reconcile.Result{}, errors.Wrapf(err, "error deleting network for AWSCluster %s/%s", awsCluster.Namespace, awsCluster.Name)
+	key, err := client.ObjectKeyFromObject(tenantConfig)
+	if err != nil {
+		log.Error(err, "failed to create tenant config reference")
+		return reconcile.Result{}, errors.Errorf("failed to create tenant config reference: %+v", err)
+	}
+	if err := r.Client.Get(ctx, key, tenantConfig); err != nil {
+		if !apierrors.IsNotFound(err) {
+			log.Error(err, "failed to get tenant config")
+			return reconcile.Result{Requeue: true, RequeueAfter: 30 * time.Second}, errors.Errorf("failed to get tenant config:%+v", err)
+		}
 	}
 
-	// Cluster is deleted so remove the finalizer.
-	controllerutil.RemoveFinalizer(clusterScope.AWSCluster, infrav1.ClusterFinalizer)
-
-	return reconcile.Result{}, nil
-}
-
-// TODO(ncdc): should this be a function on ClusterScope?
-func reconcileNormal(clusterScope *scope.ClusterScope) (reconcile.Result, error) {
-	clusterScope.Info("Reconciling AWSCluster")
-
-	awsCluster := clusterScope.AWSCluster
-
-	// If the AWSCluster doesn't have our finalizer, add it.
-	controllerutil.AddFinalizer(awsCluster, infrav1.ClusterFinalizer)
-	// Register the finalizer immediately to avoid orphaning AWS resources on delete
-	if err := clusterScope.PatchObject(); err != nil {
-		return reconcile.Result{}, err
+	if !tenantConfig.Status.Ready {
+		log.Info("wait until tenant config is ready")
+		return reconcile.Result{}, nil
 	}
 
-	ec2Service := ec2.NewService(clusterScope)
-	elbService := elb.NewService(clusterScope)
-
-	if err := ec2Service.ReconcileNetwork(); err != nil {
-		return reconcile.Result{}, errors.Wrapf(err, "failed to reconcile network for AWSCluster %s/%s", awsCluster.Namespace, awsCluster.Name)
-	}
-
-	if err := ec2Service.ReconcileBastion(); err != nil {
-		return reconcile.Result{}, errors.Wrapf(err, "failed to reconcile bastion host for AWSCluster %s/%s", awsCluster.Namespace, awsCluster.Name)
-	}
-
-	if err := elbService.ReconcileLoadbalancers(); err != nil {
-		return reconcile.Result{}, errors.Wrapf(err, "failed to reconcile load balancers for AWSCluster %s/%s", awsCluster.Namespace, awsCluster.Name)
-	}
-
-	if awsCluster.Status.Network.APIServerELB.DNSName == "" {
-		clusterScope.Info("Waiting on API server ELB DNS name")
+	if tenantConfig.Status.APIServerELB.DNSName == "" {
+		log.Info("Waiting on API server ELB DNS name")
 		return reconcile.Result{RequeueAfter: 15 * time.Second}, nil
 	}
 
-	if _, err := net.LookupIP(awsCluster.Status.Network.APIServerELB.DNSName); err != nil {
-		clusterScope.Info("Waiting on API server ELB DNS name to resolve")
+	if _, err := net.LookupIP(tenantConfig.Status.APIServerELB.DNSName); err != nil {
+		log.Info("Waiting on API server ELB DNS name to resolve")
 		return reconcile.Result{RequeueAfter: 15 * time.Second}, nil
 	}
 
 	awsCluster.Spec.ControlPlaneEndpoint = clusterv1.APIEndpoint{
-		Host: awsCluster.Status.Network.APIServerELB.DNSName,
+		Host: tenantConfig.Status.APIServerELB.DNSName,
 		Port: clusterScope.APIServerPort(),
 	}
-
-	for _, subnet := range clusterScope.Subnets().FilterPrivate() {
-		found := false
-		for _, az := range awsCluster.Status.Network.APIServerELB.AvailabilityZones {
-			if az == subnet.AvailabilityZone {
-				found = true
-				break
-			}
-		}
-
-		clusterScope.SetFailureDomain(subnet.AvailabilityZone, clusterv1.FailureDomainSpec{
-			ControlPlane: found,
-		})
-	}
-
 	awsCluster.Status.Ready = true
 	return reconcile.Result{}, nil
 }
@@ -204,6 +150,7 @@ func (r *AWSClusterReconciler) SetupWithManager(mgr ctrl.Manager, options contro
 		WithOptions(options).
 		For(&infrav1.AWSCluster{}).
 		WithEventFilter(pausedPredicates(r.Log)).
+		Owns(&infrav1.TenantConfig{}).
 		Build(r)
 
 	if err != nil {

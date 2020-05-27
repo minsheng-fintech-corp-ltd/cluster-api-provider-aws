@@ -29,15 +29,15 @@ import (
 	cgrecord "k8s.io/client-go/tools/record"
 	"k8s.io/klog"
 	"k8s.io/klog/klogr"
-	infrav1alpha2 "sigs.k8s.io/cluster-api-provider-aws/api/v1alpha2"
-	infrav1alpha3 "sigs.k8s.io/cluster-api-provider-aws/api/v1alpha3"
-	"sigs.k8s.io/cluster-api-provider-aws/controllers"
-	"sigs.k8s.io/cluster-api-provider-aws/pkg/record"
-	"sigs.k8s.io/cluster-api-provider-aws/version"
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1alpha3"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
+
+	infrav1alpha3 "sigs.k8s.io/cluster-api-provider-aws/api/v1alpha3"
+	"sigs.k8s.io/cluster-api-provider-aws/controllers"
+	"sigs.k8s.io/cluster-api-provider-aws/pkg/record"
+	"sigs.k8s.io/cluster-api-provider-aws/version"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -48,7 +48,6 @@ var (
 
 func init() {
 	_ = clientgoscheme.AddToScheme(scheme)
-	_ = infrav1alpha2.AddToScheme(scheme)
 	_ = infrav1alpha3.AddToScheme(scheme)
 	_ = clusterv1.AddToScheme(scheme)
 	// +kubebuilder:scaffold:scheme
@@ -179,8 +178,10 @@ func main() {
 	record.InitFromRecorder(mgr.GetEventRecorderFor("aws-controller"))
 
 	if webhookPort == 0 {
+
 		if err = (&controllers.AWSMachineReconciler{
 			Client:   mgr.GetClient(),
+			Scheme:   mgr.GetScheme(),
 			Log:      ctrl.Log.WithName("controllers").WithName("AWSMachine"),
 			Recorder: mgr.GetEventRecorderFor("awsmachine-controller"),
 		}).SetupWithManager(mgr, controller.Options{MaxConcurrentReconciles: awsMachineConcurrency}); err != nil {
@@ -191,8 +192,18 @@ func main() {
 			Client:   mgr.GetClient(),
 			Log:      ctrl.Log.WithName("controllers").WithName("AWSCluster"),
 			Recorder: mgr.GetEventRecorderFor("awscluster-controller"),
+			Scheme:   mgr.GetScheme(),
 		}).SetupWithManager(mgr, controller.Options{MaxConcurrentReconciles: awsClusterConcurrency}); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AWSCluster")
+			os.Exit(1)
+		}
+		if err = (&controllers.TenantConfigReconciler{
+			Client:   mgr.GetClient(),
+			Log:      ctrl.Log.WithName("controllers").WithName("TenantConfig"),
+			Scheme:   mgr.GetScheme(),
+			Recorder: mgr.GetEventRecorderFor("awscluster-controller"),
+		}).SetupWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "TenantConfig")
 			os.Exit(1)
 		}
 	} else {
@@ -220,7 +231,12 @@ func main() {
 			setupLog.Error(err, "unable to create webhook", "webhook", "AWSClusterList")
 			os.Exit(1)
 		}
+		if err = (&infrav1alpha3.TenantConfig{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "TenantConfig")
+			os.Exit(1)
+		}
 	}
+
 	// +kubebuilder:scaffold:builder
 
 	if err := mgr.AddReadyzCheck("ping", healthz.Ping); err != nil {

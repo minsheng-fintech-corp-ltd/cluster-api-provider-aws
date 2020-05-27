@@ -45,7 +45,7 @@ func (s *Service) reconcileSubnets() error {
 
 	subnets := s.scope.Subnets()
 	defer func() {
-		s.scope.AWSCluster.Spec.NetworkSpec.Subnets = subnets
+		s.scope.TenantConfig.Spec.NetworkSpec.Subnets = subnets
 	}()
 
 	// Describe subnets in the vpc.
@@ -112,7 +112,7 @@ LoopExisting:
 					}
 					return true, nil
 				}, awserrors.SubnetNotFound); err != nil {
-					record.Warnf(s.scope.AWSCluster, "FailedTagSubnet", "Failed tagging managed Subnet %q: %v", exsn.ID, err)
+					record.Warnf(s.scope.TenantConfig, "FailedTagSubnet", "Failed tagging managed Subnet %q: %v", exsn.ID, err)
 					return errors.Wrapf(err, "failed to ensure tags on subnet %q", exsn.ID)
 				}
 
@@ -244,11 +244,11 @@ func (s *Service) createSubnet(sn *infrav1.SubnetSpec) (*infrav1.SubnetSpec, err
 	})
 
 	if err != nil {
-		record.Warnf(s.scope.AWSCluster, "FailedCreateSubnet", "Failed creating new managed Subnet %v", err)
+		record.Warnf(s.scope.TenantConfig, "FailedCreateSubnet", "Failed creating new managed Subnet %v", err)
 		return nil, errors.Wrap(err, "failed to create subnet")
 	}
 
-	record.Eventf(s.scope.AWSCluster, "SuccessfulCreateSubnet", "Created new managed Subnet %q", *out.Subnet.SubnetId)
+	record.Eventf(s.scope.TenantConfig, "SuccessfulCreateSubnet", "Created new managed Subnet %q", *out.Subnet.SubnetId)
 
 	wReq := &ec2.DescribeSubnetsInput{SubnetIds: []*string{out.Subnet.SubnetId}}
 	if err := s.scope.EC2.WaitUntilSubnetAvailable(wReq); err != nil {
@@ -264,11 +264,11 @@ func (s *Service) createSubnet(sn *infrav1.SubnetSpec) (*infrav1.SubnetSpec, err
 		}
 		return true, nil
 	}, awserrors.SubnetNotFound); err != nil {
-		record.Warnf(s.scope.AWSCluster, "FailedTagSubnet", "Failed tagging managed Subnet %q: %v", *out.Subnet.SubnetId, err)
+		record.Warnf(s.scope.TenantConfig, "FailedTagSubnet", "Failed tagging managed Subnet %q: %v", *out.Subnet.SubnetId, err)
 		return nil, errors.Wrapf(err, "failed to tag subnet %q", *out.Subnet.SubnetId)
 	}
 
-	record.Eventf(s.scope.AWSCluster, "SuccessfulTagSubnet", "Tagged managed Subnet %q", *out.Subnet.SubnetId)
+	record.Eventf(s.scope.TenantConfig, "SuccessfulTagSubnet", "Tagged managed Subnet %q", *out.Subnet.SubnetId)
 
 	if sn.IsPublic {
 		attReq := &ec2.ModifySubnetAttributeInput{
@@ -284,10 +284,10 @@ func (s *Service) createSubnet(sn *infrav1.SubnetSpec) (*infrav1.SubnetSpec, err
 			}
 			return true, nil
 		}, awserrors.SubnetNotFound); err != nil {
-			record.Warnf(s.scope.AWSCluster, "FailedModifySubnetAttributes", "Failed modifying managed Subnet %q attributes: %v", *out.Subnet.SubnetId, err)
+			record.Warnf(s.scope.TenantConfig, "FailedModifySubnetAttributes", "Failed modifying managed Subnet %q attributes: %v", *out.Subnet.SubnetId, err)
 			return nil, errors.Wrapf(err, "failed to set subnet %q attributes", *out.Subnet.SubnetId)
 		}
-		record.Eventf(s.scope.AWSCluster, "SuccessfulModifySubnetAttributes", "Modified managed Subnet %q attributes", *out.Subnet.SubnetId)
+		record.Eventf(s.scope.TenantConfig, "SuccessfulModifySubnetAttributes", "Modified managed Subnet %q attributes", *out.Subnet.SubnetId)
 	}
 
 	s.scope.V(2).Info("Created new subnet in VPC with cidr and availability zone ",
@@ -310,12 +310,12 @@ func (s *Service) deleteSubnet(id string) error {
 	})
 
 	if err != nil {
-		record.Warnf(s.scope.AWSCluster, "FailedDeleteSubnet", "Failed to delete managed Subnet %q: %v", id, err)
+		record.Warnf(s.scope.TenantConfig, "FailedDeleteSubnet", "Failed to delete managed Subnet %q: %v", id, err)
 		return errors.Wrapf(err, "failed to delete subnet %q", id)
 	}
 
 	s.scope.V(2).Info("Deleted subnet in vpc", "subnet-id", id, "vpc-id", s.scope.VPC().ID)
-	record.Eventf(s.scope.AWSCluster, "SuccessfulDeleteSubnet", "Deleted managed Subnet %q", id)
+	record.Eventf(s.scope.TenantConfig, "SuccessfulDeleteSubnet", "Deleted managed Subnet %q", id)
 	return nil
 }
 

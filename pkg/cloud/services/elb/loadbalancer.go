@@ -101,7 +101,7 @@ func (s *Service) ReconcileLoadbalancers() error {
 	}
 
 	// TODO(vincepri): check if anything has changed and reconcile as necessary.
-	apiELB.DeepCopyInto(&s.scope.Network().APIServerELB)
+	apiELB.DeepCopyInto(s.scope.TenantConfig.Status.APIServerELB)
 	s.scope.V(4).Info("Control plane load balancer", "api-server-elb", apiELB)
 
 	s.scope.V(2).Info("Reconcile load balancers completed successfully")
@@ -255,7 +255,7 @@ func (s *Service) getAPIServerClassicELBSpec() (*infrav1.ClassicELB, error) {
 		Listeners: []*infrav1.ClassicELBListener{
 			{
 				Protocol:         infrav1.ClassicELBProtocolTCP,
-				Port:             int64(s.scope.APIServerPort()),
+				Port:             int64(s.scope.ClusterScope.APIServerPort()),
 				InstanceProtocol: infrav1.ClassicELBProtocolTCP,
 				InstancePort:     6443,
 			},
@@ -273,8 +273,8 @@ func (s *Service) getAPIServerClassicELBSpec() (*infrav1.ClassicELB, error) {
 		},
 	}
 
-	if s.scope.AWSCluster.Spec.ControlPlaneLoadBalancer != nil {
-		res.Attributes.CrossZoneLoadBalancing = s.scope.AWSCluster.Spec.ControlPlaneLoadBalancer.CrossZoneLoadBalancing
+	if s.scope.TenantConfig.Spec.ControlPlaneLoadBalancer != nil {
+		res.Attributes.CrossZoneLoadBalancing = s.scope.TenantConfig.Spec.ControlPlaneLoadBalancer.CrossZoneLoadBalancing
 	}
 
 	res.Tags = infrav1.Build(infrav1.BuildParams{

@@ -54,7 +54,7 @@ Different MVPs may be possible - e.g. EKS vs. not EKS, but they may rely on shar
 #### 6: The provider deploys the control plane in public subnets
 
 * Constraint: Mandatory sub-feature of [5](#5-control-plane-placement)
-* Requirement: For simple clusters without bastion hosts, allowing users to break-glass SSH to control plane nodes
+* Requirement: For simple clusters, allowing users to break-glass SSH to control plane nodes
   
 #### 7: The provider deploys the control plane in private subnets
 

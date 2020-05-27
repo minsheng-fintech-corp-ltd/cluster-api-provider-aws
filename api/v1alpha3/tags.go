@@ -107,9 +107,6 @@ const (
 	// APIServerRoleTagValue describes the value for the apiserver role
 	APIServerRoleTagValue = "apiserver"
 
-	// BastionRoleTagValue describes the value for the bastion role
-	BastionRoleTagValue = "bastion"
-
 	// CommonRoleTagValue describes the value for the common role
 	CommonRoleTagValue = "common"
 

@@ -91,4 +91,3 @@ Users may either specify `failureDomain` on the Machine or MachineDeployment obj
 ## Caveats/Notes
 
 * When both public and private subnets are available in an AZ, CAPI will choose the private subnet in the AZ over the public subnet for placing EC2 instances.
-* If you configure CAPI to use existing infrastructure as outlined above, CAPI will _not_ create an SSH bastion host. Combined with the previous bullet, this means you must make sure you have established some form of connectivity to the instances that CAPI will create.

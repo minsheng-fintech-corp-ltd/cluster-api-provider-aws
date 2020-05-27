@@ -9,4 +9,6 @@ bases:
 - ../manager
 
 patchesStrategicMerge:
-- manager_credentials_patch.yaml
+#  - manager_credentials_patch.yaml
+  - manager_prometheus_metrics_patch.yaml
+  - manager_role_aggregation_patch.yaml

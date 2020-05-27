@@ -20,6 +20,8 @@ import (
 	"context"
 	"fmt"
 
+	"k8s.io/apimachinery/pkg/runtime"
+
 	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
@@ -53,11 +55,12 @@ type AWSMachineReconciler struct {
 	client.Client
 	Log                          logr.Logger
 	Recorder                     record.EventRecorder
-	ec2ServiceFactory            func(*scope.ClusterScope) services.EC2MachineInterface
-	secretsManagerServiceFactory func(*scope.ClusterScope) services.SecretsManagerInterface
+	Scheme                       *runtime.Scheme
+	ec2ServiceFactory            func(configScope *scope.TenantConfigScope) services.EC2MachineInterface
+	secretsManagerServiceFactory func(*scope.TenantConfigScope) services.SecretsManagerInterface
 }
 
-func (r *AWSMachineReconciler) getEC2Service(scope *scope.ClusterScope) services.EC2MachineInterface {
+func (r *AWSMachineReconciler) getEC2Service(scope *scope.TenantConfigScope) services.EC2MachineInterface {
 	if r.ec2ServiceFactory != nil {
 		return r.ec2ServiceFactory(scope)
 	}
@@ -65,7 +68,7 @@ func (r *AWSMachineReconciler) getEC2Service(scope *scope.ClusterScope) services
 	return ec2.NewService(scope)
 }
 
-func (r *AWSMachineReconciler) getSecretsManagerService(scope *scope.ClusterScope) services.SecretsManagerInterface {
+func (r *AWSMachineReconciler) getSecretsManagerService(scope *scope.TenantConfigScope) services.SecretsManagerInterface {
 	if r.secretsManagerServiceFactory != nil {
 		return r.secretsManagerServiceFactory(scope)
 	}
@@ -143,6 +146,28 @@ func (r *AWSMachineReconciler) Reconcile(req ctrl.Request) (_ ctrl.Result, reter
 		return ctrl.Result{}, err
 	}
 
+	tenantConfig := &infrav1.TenantConfig{}
+
+	tenantConfigName := client.ObjectKey{
+		Namespace: awsMachine.Namespace,
+		Name:      awsMachine.Spec.TenantConfig,
+	}
+
+	if err := r.Client.Get(ctx, tenantConfigName, tenantConfig); err != nil {
+		logger.Info("tenantConfig is not available yet")
+		return ctrl.Result{}, nil
+	}
+
+	logger = logger.WithValues("tenantConfig", tenantConfig.Name)
+
+	//TODO:fix
+	tenantScope, err := scope.NewTenantConfigScope(scope.TenantConfigParams{
+		Logger:       logger,
+		Client:       r.Client,
+		ClusterScope: clusterScope,
+		TenantConfig: tenantConfig,
+	})
+
 	// Create the machine scope
 	machineScope, err := scope.NewMachineScope(scope.MachineScopeParams{
 		Logger:     logger,
@@ -158,6 +183,7 @@ func (r *AWSMachineReconciler) Reconcile(req ctrl.Request) (_ ctrl.Result, reter
 
 	// Always close the scope when exiting this function so we can persist any AWSMachine changes.
 	defer func() {
+
 		if err := machineScope.Close(); err != nil && reterr == nil {
 			reterr = err
 		}
@@ -165,11 +191,11 @@ func (r *AWSMachineReconciler) Reconcile(req ctrl.Request) (_ ctrl.Result, reter
 
 	// Handle deleted machines
 	if !awsMachine.ObjectMeta.DeletionTimestamp.IsZero() {
-		return r.reconcileDelete(machineScope, clusterScope)
+		return r.reconcileDelete(machineScope, tenantScope)
 	}
 
 	// Handle non-deleted machines
-	return r.reconcileNormal(ctx, machineScope, clusterScope)
+	return r.reconcileNormal(ctx, machineScope, tenantScope)
 }
 
 func (r *AWSMachineReconciler) SetupWithManager(mgr ctrl.Manager, options controller.Options) error {
@@ -250,11 +276,11 @@ func (r *AWSMachineReconciler) SetupWithManager(mgr ctrl.Manager, options contro
 	)
 }
 
-func (r *AWSMachineReconciler) reconcileDelete(machineScope *scope.MachineScope, clusterScope *scope.ClusterScope) (ctrl.Result, error) {
+func (r *AWSMachineReconciler) reconcileDelete(machineScope *scope.MachineScope, tenantConfigScope *scope.TenantConfigScope) (ctrl.Result, error) {
 	machineScope.Info("Handling deleted AWSMachine")
 
-	ec2Service := r.getEC2Service(clusterScope)
-	secretSvc := r.getSecretsManagerService(clusterScope)
+	ec2Service := r.getEC2Service(tenantConfigScope)
+	secretSvc := r.getSecretsManagerService(tenantConfigScope)
 
 	if err := r.deleteEncryptedBootstrapDataSecret(machineScope, secretSvc); err != nil {
 		return ctrl.Result{}, err
@@ -351,10 +377,10 @@ func (r *AWSMachineReconciler) findInstance(scope *scope.MachineScope, ec2svc se
 	return instance, nil
 }
 
-func (r *AWSMachineReconciler) reconcileNormal(_ context.Context, machineScope *scope.MachineScope, clusterScope *scope.ClusterScope) (ctrl.Result, error) {
+func (r *AWSMachineReconciler) reconcileNormal(_ context.Context, machineScope *scope.MachineScope, tenantConfigScope *scope.TenantConfigScope) (ctrl.Result, error) {
 	machineScope.Info("Reconciling AWSMachine")
 
-	secretSvc := r.getSecretsManagerService(clusterScope)
+	secretSvc := r.getSecretsManagerService(tenantConfigScope)
 
 	// If the AWSMachine is in an error state, return early.
 	if machineScope.HasFailed() {
@@ -386,7 +412,7 @@ func (r *AWSMachineReconciler) reconcileNormal(_ context.Context, machineScope *
 		return ctrl.Result{}, nil
 	}
 
-	ec2svc := r.getEC2Service(clusterScope)
+	ec2svc := r.getEC2Service(tenantConfigScope)
 
 	// Get or create the instance.
 	instance, err := r.getOrCreate(machineScope, ec2svc, secretSvc)
@@ -457,7 +483,7 @@ func (r *AWSMachineReconciler) reconcileNormal(_ context.Context, machineScope *
 	if machineScope.InstanceIsOperational() {
 		machineScope.SetAddresses(instance.Addresses)
 
-		if err := r.reconcileLBAttachment(machineScope, clusterScope, instance); err != nil {
+		if err := r.reconcileLBAttachment(machineScope, tenantConfigScope, instance); err != nil {
 			return ctrl.Result{}, errors.Errorf("failed to reconcile LB attachment: %+v", err)
 		}
 
@@ -542,7 +568,7 @@ func (r *AWSMachineReconciler) getOrCreate(scope *scope.MachineScope, ec2svc ser
 			scope.Error(serviceErr, "Failed to create AWS Secret entry", "secretPrefix", prefix)
 			return nil, serviceErr
 		}
-		encryptedCloudInit, err := secretsmanager.GenerateCloudInitMIMEDocument(scope.GetSecretPrefix(), scope.GetSecretCount(), scope.AWSCluster.Spec.Region)
+		encryptedCloudInit, err := secretsmanager.GenerateCloudInitMIMEDocument(scope.GetSecretPrefix(), scope.GetSecretCount(), scope.TenantConfig.Spec.Region)
 		if err != nil {
 			r.Recorder.Eventf(scope.AWSMachine, corev1.EventTypeWarning, "FailedGenerateAWSSecretsManagerCloudInit", err.Error())
 			return nil, err
@@ -558,12 +584,12 @@ func (r *AWSMachineReconciler) getOrCreate(scope *scope.MachineScope, ec2svc ser
 	return instance, nil
 }
 
-func (r *AWSMachineReconciler) reconcileLBAttachment(machineScope *scope.MachineScope, clusterScope *scope.ClusterScope, i *infrav1.Instance) error {
+func (r *AWSMachineReconciler) reconcileLBAttachment(machineScope *scope.MachineScope, tenantConfigScope *scope.TenantConfigScope, i *infrav1.Instance) error {
 	if !machineScope.IsControlPlane() {
 		return nil
 	}
 
-	elbsvc := elb.NewService(clusterScope)
+	elbsvc := elb.NewService(tenantConfigScope)
 	if err := elbsvc.RegisterInstanceWithAPIServerELB(i); err != nil {
 		r.Recorder.Eventf(machineScope.AWSMachine, corev1.EventTypeWarning, "FailedAttachControlPlaneELB",
 			"Failed to register control plane instance %q with load balancer: %v", i.ID, err)

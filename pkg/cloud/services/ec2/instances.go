@@ -39,6 +39,10 @@ import (
 	capierrors "sigs.k8s.io/cluster-api/errors"
 )
 
+const (
+	defaultSSHKeyName = "default"
+)
+
 // GetRunningInstanceByTags returns the existing instance or nothing if it doesn't exist.
 func (s *Service) GetRunningInstanceByTags(scope *scope.MachineScope) (*infrav1.Instance, error) {
 	s.scope.V(2).Info("Looking for existing machine instance by tags")
@@ -108,6 +112,7 @@ func (s *Service) CreateInstance(scope *scope.MachineScope, userData []byte) (*i
 		Type:              scope.AWSMachine.Spec.InstanceType,
 		IAMProfile:        scope.AWSMachine.Spec.IAMInstanceProfile,
 		RootVolume:        scope.AWSMachine.Spec.RootVolume,
+		DataVolumes:       scope.AWSMachine.Spec.DataVolumes,
 		NetworkInterfaces: scope.AWSMachine.Spec.NetworkInterfaces,
 	}
 
@@ -133,21 +138,6 @@ func (s *Service) CreateInstance(scope *scope.MachineScope, userData []byte) (*i
 			err := errors.New("Either AWSMachine's spec.ami.id or Machine's spec.version must be defined")
 			scope.SetFailureReason(capierrors.CreateMachineError)
 			scope.SetFailureMessage(err)
-			return nil, err
-		}
-
-		imageLookupOrg := scope.AWSMachine.Spec.ImageLookupOrg
-		if imageLookupOrg == "" {
-			imageLookupOrg = scope.AWSCluster.Spec.ImageLookupOrg
-		}
-
-		imageLookupBaseOS := scope.AWSMachine.Spec.ImageLookupBaseOS
-		if imageLookupBaseOS == "" {
-			imageLookupBaseOS = scope.AWSCluster.Spec.ImageLookupBaseOS
-		}
-
-		input.ImageID, err = s.defaultAMILookup(imageLookupOrg, imageLookupBaseOS, *scope.Machine.Spec.Version)
-		if err != nil {
 			return nil, err
 		}
 	}
@@ -194,7 +184,7 @@ func (s *Service) CreateInstance(scope *scope.MachineScope, userData []byte) (*i
 		input.SubnetID = sns[0].ID
 	}
 
-	if s.scope.Network().APIServerELB.DNSName == "" {
+	if s.scope.TenantConfig.Status.APIServerELB.DNSName == "" {
 		return nil, awserrors.NewFailedDependency(
 			errors.New("failed to run controlplane, APIServer ELB not available"),
 		)
@@ -219,8 +209,8 @@ func (s *Service) CreateInstance(scope *scope.MachineScope, userData []byte) (*i
 	// If a value was not provided in the AWSCluster Spec, then use the defaultSSHKeyName
 	input.SSHKeyName = scope.AWSMachine.Spec.SSHKeyName
 	if input.SSHKeyName == nil {
-		if scope.AWSCluster.Spec.SSHKeyName != nil {
-			input.SSHKeyName = scope.AWSCluster.Spec.SSHKeyName
+		if scope.TenantConfig.Spec.SSHKeyName != nil {
+			input.SSHKeyName = scope.TenantConfig.Spec.SSHKeyName
 		} else {
 			input.SSHKeyName = aws.String(defaultSSHKeyName)
 		}
@@ -393,6 +383,37 @@ func (s *Service) runInstance(role string, i *infrav1.Instance) (*infrav1.Instan
 				Ebs:        ebsRootDevice,
 			},
 		}
+		if len(i.DataVolumes) > 0 {
+			for index, volume := range i.DataVolumes {
+				ebsDataDevice := &ec2.EbsBlockDevice{
+					DeleteOnTermination: aws.Bool(true),
+					VolumeSize:          aws.Int64(volume.Size),
+					Encrypted:           aws.Bool(volume.Encrypted),
+				}
+				dataDeviceName, err := s.getDataDevice(uint8(index))
+				if err != nil {
+					return nil, errors.Wrapf(err, "failed to get data volume")
+				}
+
+				if volume.IOPS != 0 {
+					ebsDataDevice.Iops = aws.Int64(volume.IOPS)
+				}
+
+				if volume.EncryptionKey != "" {
+					ebsDataDevice.Encrypted = aws.Bool(true)
+					ebsDataDevice.KmsKeyId = aws.String(volume.EncryptionKey)
+				}
+
+				if volume.Type != "" {
+					ebsDataDevice.VolumeType = aws.String(volume.Type)
+				}
+
+				input.BlockDeviceMappings = append(input.BlockDeviceMappings, &ec2.BlockDeviceMapping{
+					DeviceName: dataDeviceName,
+					Ebs:        ebsDataDevice,
+				})
+			}
+		}
 	}
 
 	if len(i.Tags) > 0 {
@@ -562,6 +583,14 @@ func (s *Service) getImageRootDevice(imageID string) (*string, error) {
 	}
 
 	return output.Images[0].RootDeviceName, nil
+}
+
+func (s *Service) getDataDevice(index uint8) (*string, error) {
+	if index > 25 {
+		return nil, errors.New("index is out of range")
+	}
+	result := "/dev/sd" + string('b'+index)
+	return &result, nil
 }
 
 func (s *Service) getImageSnapshotSize(imageID string) (*int64, error) {

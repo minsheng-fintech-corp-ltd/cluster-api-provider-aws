@@ -36,13 +36,6 @@ type AWSMachineSpec struct {
 	// AMI is the reference to the AMI from which to create the machine instance.
 	AMI AWSResourceReference `json:"ami,omitempty"`
 
-	// ImageLookupOrg is the AWS Organization ID to use for image lookup if AMI is not set.
-	ImageLookupOrg string `json:"imageLookupOrg,omitempty"`
-
-	// ImageLookupBaseOS is the name of the base operating system to use for
-	// image lookup the AMI is not set.
-	ImageLookupBaseOS string `json:"imageLookupBaseOS,omitempty"`
-
 	// InstanceType is the type of instance to create. Example: m4.xlarge
 	InstanceType string `json:"instanceType,omitempty"`
 
@@ -88,6 +81,10 @@ type AWSMachineSpec struct {
 	// +optional
 	RootVolume *RootVolume `json:"rootVolume,omitempty"`
 
+	// RootVolume encapsulates the configuration options for the root volume
+	// +optional
+	DataVolumes []*DataVolume `json:"dataVolumes,omitempty"`
+
 	// NetworkInterfaces is a list of ENIs to associate with the instance.
 	// A maximum of 2 may be specified.
 	// +optional
@@ -105,6 +102,10 @@ type AWSMachineSpec struct {
 	// CloudInit is used.
 	// +optional
 	CloudInit CloudInit `json:"cloudInit,omitempty"`
+
+	// TenantConfigReference contains a reference to aws account resource
+	// +optional
+	TenantConfig string `json:"tenantConfigReference,omitempty"`
 }
 
 // CloudInit defines options related to the bootstrapping systems where

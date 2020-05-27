@@ -95,9 +95,8 @@ func TestAWSMachine_ValidateUpdate(t *testing.T) {
 			},
 			newMachine: &AWSMachine{
 				Spec: AWSMachineSpec{
-					ImageLookupOrg: "test",
-					InstanceType:   "test",
-					ProviderID:     pointer.StringPtr("ID"),
+					InstanceType: "test",
+					ProviderID:   pointer.StringPtr("ID"),
 					AdditionalTags: Tags{
 						"key-1": "value-1",
 					},

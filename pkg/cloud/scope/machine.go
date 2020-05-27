@@ -91,10 +91,11 @@ type MachineScope struct {
 	client      client.Client
 	patchHelper *patch.Helper
 
-	Cluster    *clusterv1.Cluster
-	Machine    *clusterv1.Machine
-	AWSCluster *infrav1.AWSCluster
-	AWSMachine *infrav1.AWSMachine
+	Cluster      *clusterv1.Cluster
+	Machine      *clusterv1.Machine
+	AWSCluster   *infrav1.AWSCluster
+	TenantConfig *infrav1.TenantConfig
+	AWSMachine   *infrav1.AWSMachine
 }
 
 // Name returns the AWSMachine name.

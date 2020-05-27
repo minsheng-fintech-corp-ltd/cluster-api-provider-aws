@@ -943,3 +943,33 @@ func TestCreateInstance(t *testing.T) {
 		})
 	}
 }
+
+func TestService_getDataDevice(t *testing.T) {
+	type fields struct {
+		scope *scope.TenantConfigScope
+	}
+	tests := []struct {
+		name    string
+		index   uint8
+		want    *string
+		wantErr bool
+	}{
+		name:    "index is out of range",
+		index:   26,
+		want:    nil,
+		wantErr: true,
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &Service{}
+			got, err := s.getDataDevice(tt.args.index)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Service.getDataDevice() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("Service.getDataDevice() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

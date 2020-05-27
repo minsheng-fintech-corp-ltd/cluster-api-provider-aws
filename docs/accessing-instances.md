@@ -20,26 +20,7 @@ There are two ways to access cluster nodes once the workload cluster is up and r
 
 ### Accessing nodes via SSH
 
-By default, workload clusters created in AWS will _not_ support access via SSH apart from AWS Session Manager (see the section titled "Accessing nodes via AWS Session Manager"). However, the manifest for a workload cluster can be modified to include an SSH bastion host, created and managed by the management cluster, to enable SSH access to cluster nodes. The bastion node is created in a public subnet and provides SSH access from the world. It runs the official Ubuntu Linux image.
-
-#### Enabling the bastion host
-
-To configure the Cluster API Provider for AWS to create an SSH bastion host, add this line to the AWSCluster spec:
-
-```yaml
-spec:
-  bastion:
-    enabled: true
-```
-
-#### Obtain public IP address of the bastion node
-
-Once the workload cluster is up and running after being configured for an SSH bastion host, you can use the `kubectl get awscluster` command to look up the public IP address of the bastion host (make sure the `kubectl` context is set to the management cluster). The output will look something like this:
-
-```bash
-NAME   CLUSTER   READY   VPC                     BASTION IP
-test   test      true    vpc-1739285ed052be7ad   1.2.3.4
-```
+By default, workload clusters created in AWS will _not_ support access via SSH apart from AWS Session Manager (see the section titled "Accessing nodes via AWS Session Manager"). 
 
 #### Setting up the SSH key path
 
@@ -70,30 +51,9 @@ ip-10-0-0-68.us-west-2.compute.internal   10.0.0.68
 The above command returns IP addresses of the nodes in the cluster. In this
 case, the values returned are `10.0.0.16` and `10.0.0.68`.
 
-### Connecting to the nodes via SSH
-
-To access one of the nodes (either a control plane node or a worker node) via the SSH bastion host, use this command:
-
-```bash
-ssh -i ${CLUSTER_SSH_KEY} ubuntu@<NODE_IP> \
-	-o "ProxyCommand ssh -W %h:%p -i ${CLUSTER_SSH_KEY} ubuntu@${BASTION_HOST}"
-```
-
-If the whole document is followed, the value of `<NODE_IP>` will be either
-10.0.0.16 or 10.0.0.68.
-
-Alternately, users can add a configuration stanza to their SSH configuration file (typically found on macOS/Linux systems as `$HOME/.ssh/config`):
-
-```text
-Host 10.0.*
-  User ubuntu
-  IdentityFile <CLUSTER_SSH_KEY>
-  ProxyCommand ssh -W %h:%p ubuntu@<BASTION_HOST>
-```
-
 ### Accessing nodes via AWS Session Manager
 
-All CAPA-published AMIs based on Ubuntu have the AWS SSM Agent pre-installed (as a Snap package; this was added in June 2018 to the base Ubuntu Server image for all 16.04 and later AMIs). This allows users to access cluster nodes directly, without the need for an SSH bastion host, using the AWS CLI and the Session Manager plugin.
+All CAPA-published AMIs based on Ubuntu have the AWS SSM Agent pre-installed (as a Snap package; this was added in June 2018 to the base Ubuntu Server image for all 16.04 and later AMIs). This allows users to access cluster nodes directly, using the AWS CLI and the Session Manager plugin.
 
 To access a cluster node (control plane node or worker node), you'll need the instance ID. You can retrieve the instance ID using this `kubectl` command with the context set to the management cluster:
 
@@ -123,16 +83,7 @@ This will log you into the cluster node as the `ssm-user` user ID.
 
 It is also possible to use AWS CLI commands instead of `kubectl` to gather information about the cluster nodes.
 
-For example, to use the AWS CLI to get the public IP address of the SSH bastion host, use this AWS CLI command:
-
-```bash
-export BASTION_HOST=$(aws ec2 describe-instances --filter='Name=tag:Name,Values=<CLUSTER_NAME>-bastion' \
-	| jq '.Reservations[].Instances[].PublicIpAddress' -r)
-```
-
-You should substitute the correct cluster name for `<CLUSTER_NAME>` in the above command. (**NOTE**: If `make manifests` was used to generate manifests, by default the `<CLUSTER_NAME>` is set to `test1`.)
-
-Similarly, to obtain the list of private IP addresses of the cluster nodes, use this AWS CLI command:
+To obtain the list of private IP addresses of the cluster nodes, use this AWS CLI command:
 
 ```bash
 for type in control-plane node

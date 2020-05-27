@@ -126,17 +126,22 @@ func TestAMIsWithInvalidCreationDate(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ec2Mock := mock_ec2iface.NewMockEC2API(mockCtrl)
 
-			scope, err := scope.NewClusterScope(scope.ClusterScopeParams{
+			clusterScope, err := scope.NewClusterScope(scope.ClusterScopeParams{
 				Cluster:    &clusterv1.Cluster{},
 				AWSCluster: &infrav1.AWSCluster{},
-				AWSClients: scope.AWSClients{
-					EC2: ec2Mock,
-				},
 			})
 			if err != nil {
 				t.Fatalf("did not expect err: %v", err)
 			}
-
+			scope, err := scope.NewTenantConfigScope(scope.TenantConfigParams{
+				AWSClients: scope.AWSClients{
+					EC2: ec2Mock,
+				},
+				ClusterScope: clusterScope,
+			})
+			if err != nil {
+				t.Fatalf("did not expect err: %v", err)
+			}
 			tc.expect(ec2Mock.EXPECT())
 
 			s := NewService(scope)

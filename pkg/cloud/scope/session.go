@@ -20,6 +20,8 @@ import (
 	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
+
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
@@ -27,17 +29,24 @@ var (
 	sessionCache sync.Map
 )
 
-func sessionForRegion(region string) (*session.Session, error) {
-	s, ok := sessionCache.Load(region)
+func sessionForRegion(region string, arn string) (*session.Session, error) {
+	key := region + arn
+	s, ok := sessionCache.Load(key)
 	if ok {
 		return s.(*session.Session), nil
 	}
-
-	ns, err := session.NewSession(aws.NewConfig().WithRegion(region))
+	sess := session.Must(session.NewSession())
+	config := &aws.Config{
+		Region: &region,
+	}
+	if len(arn) > 0 {
+		config.Credentials = stscreds.NewCredentials(sess, arn)
+	}
+	ns, err := session.NewSession(config)
 	if err != nil {
 		return nil, err
 	}
 
-	sessionCache.Store(region, ns)
+	sessionCache.Store(key, ns)
 	return ns, nil
 }
